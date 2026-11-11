@@ -34,3 +34,19 @@ export function Coupon({ code, onCopied }: { code: string; onCopied?: () => void
     </button>
   )
 }
+
+/** A row of toggle chips. Black when on, hairline when off. */
+export function Chips<T extends string | null>({ items, value, onChange, label }: { items: readonly (readonly [T, string])[]; value: T; onChange: (v: T) => void; label: string }) {
+  return (
+    <div role="group" aria-label={label} className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4">
+      {items.map(([id, text]) => {
+        const on = value === id
+        return (
+          <button key={text} type="button" aria-pressed={on} onClick={() => onChange(id)}
+            className="min-h-11 shrink-0 cursor-pointer border-[1.5px] px-4 font-semibold"
+            style={on ? { background: 'var(--color-ink)', color: 'var(--color-bg)', borderColor: 'var(--color-ink)' } : { background: 'transparent', color: 'var(--color-ink)', borderColor: 'var(--color-line)' }}>{text}</button>
+        )
+      })}
+    </div>
+  )
+}

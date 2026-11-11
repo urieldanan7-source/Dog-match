@@ -49,3 +49,17 @@ export const plans: Plan[] = [
   { id: 'i3', company: 'ביטוח דוגמה ג׳', name: 'מלא', monthly: 169, deductible: 200, yearlyCap: 40000, joinAge: 'מגיל חודשיים עד 6',
     covers: ['ניתוחים', 'אשפוז', 'תאונות', 'בדיקות דם והדמיה', 'תרופות', 'חיסונים שנתיים', 'טיפולי שיניים'], excludes: ['מחלות שהיו לפני ההצטרפות'], coupon: { code: 'FULL10', text: '10% הנחה בשנה הראשונה' } },
 ]
+
+export interface Shelter { id: string; name: string; area: string; dogs: number; note: string }
+export const shelters: Shelter[] = [
+  { id: 'sh1', name: 'עמותת אימוץ דוגמה', area: 'מרכז', dogs: 40, note: 'יום אימוץ בכל שישי' },
+  { id: 'sh2', name: 'בית לכלבים', area: 'צפון', dogs: 25, note: 'אפשר לבוא להתנדב לפני שמאמצים' },
+  { id: 'sh3', name: 'כלבים מחפשים בית', area: 'דרום', dogs: 60, note: 'הרבה כלבים מעורבים בגודל בינוני' },
+]
+
+export interface Sitter { id: string; name: string; area: string; dog: string; canHost: string[]; note: string }
+export const sitters: Sitter[] = [
+  { id: 'st1', name: 'נועה', area: 'תל אביב, הצפון הישן', dog: 'לברדור בן 4', canHost: ['כלבים בינוניים', 'כלבים גדולים'], note: 'עובדת מהבית' },
+  { id: 'st2', name: 'דניאל', area: 'רמת גן', dog: 'שיצו בת 7', canHost: ['כלבים קטנים'], note: 'יש חצר מגודרת' },
+  { id: 'st3', name: 'מיכל ויואב', area: 'גבעתיים', dog: 'מעורב בן 2', canHost: ['כלבים קטנים', 'כלבים בינוניים'], note: 'בלי חתולים בבית' },
+]

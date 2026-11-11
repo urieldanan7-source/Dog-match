@@ -5,9 +5,8 @@ import { actions, useStore } from '../lib/store'
 import { Close, Menu, Moon, Paw, Sun } from './Icons'
 import { Companion } from './Companion'
 
-const NAV: [string, string][] = [['/quiz', 'השאלון'], ['/library', 'ספריית הכלבים'], ['/my-dog', 'הכלב שלי'], ['/store', 'חנות וקופונים'], ['/insurance', 'ביטוח בריאות']]
-const MORE: [string, string][] = [['/', 'בית'], ['/health', 'שאלות בריאות'], ['/toxic', 'מה אסור לכלב לאכול'], ['/compare', 'השוואה בין זנים'], ['/emergency', 'חירום'], ['/accessibility', 'הצהרת נגישות']]
-const SOON = ['הבוט זנבי', 'אלבום הגדילה']
+const NAV: [string, string][] = [['/quiz', 'השאלון'], ['/library', 'ספריית הכלבים'], ['/my-dog', 'הכלב שלי'], ['/places', 'מפה'], ['/store', 'חנות וקופונים'], ['/zanbi', 'זנבי']]
+const MORE: [string, string][] = [['/', 'בית'], ['/insurance', 'ביטוח בריאות'], ['/health', 'שאלות בריאות'], ['/toxic', 'מה אסור לכלב לאכול'], ['/lost', 'כלב אבד או נמצא'], ['/sitters', 'החלפת שמירה'], ['/adopt', 'אימוץ'], ['/kids', 'מצב ילדים'], ['/compare', 'השוואה בין זנים'], ['/emergency', 'חירום'], ['/accessibility', 'הצהרת נגישות']]
 
 /** Applies the theme to <html>: night mode, and the accent of the dog the user chose. */
 export function useTheme() {
@@ -65,10 +64,6 @@ function MenuSheet({ onClose }: { onClose: () => void }) {
       <button type="button" onClick={() => actions.setNight(!night)} aria-pressed={night} className="btn btn-ghost mt-5 w-full">
         {night ? <Sun /> : <Moon />}{night ? 'מצב יום' : 'מצב לילה'}
       </button>
-      <h3 className="mt-6 text-base text-ink-soft">בקרוב</h3>
-      <ul className="m-0 mt-1 list-none p-0 text-ink-soft">
-        {SOON.map((s) => <li key={s} className="flex min-h-10 items-center">{s}</li>)}
-      </ul>
     </dialog>
   )
 }

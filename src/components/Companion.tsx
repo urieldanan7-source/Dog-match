@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { dogImage } from '../lib/dogAssets'
 import { breedById } from '../lib/scoring'
 import { DEFAULT_DOG, isSleepTime, useStore } from '../lib/store'
@@ -35,12 +35,15 @@ export function Companion({ wag = false }: { wag?: boolean }) {
     <div className="fixed bottom-4 z-40 flex items-end gap-2" style={{ insetInlineEnd: 16 }}>
       <AnimatePresence>
         {open && (
-          <motion.p
+          <motion.div
             id="companion-tip" role="status"
             initial={{ opacity: 0, y: 8, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8 }}
-            className="m-0 mb-3 max-w-[15rem] bg-ink px-4 py-3 text-[.9375rem] text-bg"
+            className="m-0 mb-3 max-w-[15rem] bg-[#160F11] px-4 py-3 text-[.9375rem] text-[#F6E4E2]"
             style={{ borderRadius: '14px 14px 14px 2px' }}
-          >{tip}</motion.p>
+          >
+            <p className="m-0">{tip}</p>
+            {!sleeping && pathname !== '/zanbi' && <Link to="/zanbi" className="mt-2 inline-flex min-h-11 items-center font-semibold text-[#F2D7D2] underline">לשאול את זנבי</Link>}
+          </motion.div>
         )}
       </AnimatePresence>
       <button

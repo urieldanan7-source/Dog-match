@@ -3,8 +3,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Page } from '../components/Layout'
 import { Alert, Check, Forward } from '../components/Icons'
 import { Arch, SectionHead } from '../components/ui'
-import { duties, reminders } from '../data/care'
-import { addDays, daysBetween, formatDate, projects, today, useProjects, type Project } from '../lib/projects'
+import { duties } from '../data/care'
+import { upcoming } from '../lib/reminders'
+import { Album, CalendarButton, Senior } from '../components/ProjectExtras'
+import { daysBetween, formatDate, projects, today, useProjects } from '../lib/projects'
 import { breedById, breeds } from '../lib/scoring'
 import { useStore } from '../lib/store'
 import { levelText } from '../lib/traitCopy'
@@ -56,23 +58,13 @@ export function MyDogList() {
   )
 }
 
-function dueDate(p: Project, r: (typeof reminders)[number]): string | null {
-  const last = p.done[r.id]
-  if (r.atAgeWeeks !== undefined) {
-    if (!p.birth || last) return null
-    const due = addDays(p.birth, r.atAgeWeeks * 7)
-    return daysBetween(p.birth, today()) > 365 ? null : due
-  }
-  return addDays(last ?? p.created, r.everyDays!)
-}
-
 export function MyDogProject() {
   const { id } = useParams()
   const navigate = useNavigate()
   const list = useProjects()
   const p = list.find((x) => x.id === id)
   const [confirm, setConfirm] = useState(false)
-  const items = useMemo(() => (p ? reminders.map((r) => ({ r, due: dueDate(p, r) })).filter((x) => x.due).sort((a, b) => a.due!.localeCompare(b.due!)) : []), [p])
+  const items = useMemo(() => (p ? upcoming(p) : []), [p])
   if (!p) return <Page title="הכלב שלי"><p className="pt-10 text-lg">לא מצאנו את הפרויקט הזה. <Link to="/my-dog" className="link">לכל הכלבים</Link></p></Page>
   const breed = breedById(p.breedId)!
   const c = breed.care
@@ -93,8 +85,13 @@ export function MyDogProject() {
       </div>
 
       <section aria-labelledby="rem-h" className="mt-12">
-        <h2 id="rem-h" className="text-3xl">תזכורות</h2>
-        <p className="m-0 mt-1 text-ink-soft">לוח כללי. הווטרינר קובע את הלוח המדויק.{!p.birth && ' בלי תאריך לידה לא מוצגים חיסוני גורים.'}</p>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 id="rem-h" className="text-3xl">תזכורות</h2>
+            <p className="m-0 mt-1 text-ink-soft">לוח כללי. הווטרינר קובע את הלוח המדויק.{!p.birth && ' בלי תאריך לידה לא מוצגים חיסוני גורים.'}</p>
+          </div>
+          <CalendarButton p={p} />
+        </div>
         <ul className="m-0 mt-5 grid list-none p-0">
           {items.map(({ r, due }) => {
             const left = daysBetween(today(), due!)
@@ -109,6 +106,8 @@ export function MyDogProject() {
           })}
         </ul>
       </section>
+
+      <Senior p={p} />
 
       <section aria-labelledby="food-h" className="mt-14 grid gap-6 lg:grid-cols-2">
         <div className="panel p-6">
@@ -161,6 +160,18 @@ export function MyDogProject() {
         <ul className="m-0 mt-4 grid list-none gap-2 p-0 sm:grid-cols-2">
           {(['exercise', 'alone', 'grooming', 'heat'] as const).map((t) => <li key={t} className="border-t border-line pt-3"><span className="font-semibold">{levelText(t, breed.scores[t])}</span></li>)}
         </ul>
+      </section>
+
+      <Album p={p} />
+
+      <section aria-labelledby="help-h" className="mt-14">
+        <h2 id="help-h" className="text-3xl">עוד בשביל {p.name}</h2>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <Link to="/zanbi" className="btn btn-primary">לשאול את זנבי</Link>
+          <Link to="/places" className="btn btn-ghost">לאן לצאת איתו</Link>
+          <Link to={`/lost?dog=${p.id}`} className="btn btn-ghost">אם הוא הולך לאיבוד</Link>
+          <Link to="/sitters" className="btn btn-ghost">מי ישמור עליו כשנוסעים</Link>
+        </div>
       </section>
 
       <div className="mt-16 border-t border-line pt-6">

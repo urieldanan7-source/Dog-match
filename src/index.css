@@ -120,3 +120,19 @@ a { color: var(--accent-strong); }
 
 /* The turntable videos have their own dark floor. A soft mask melts it into the stage. */
 .turntable { -webkit-mask-image: radial-gradient(ellipse 58% 56% at 50% 48%, #000 45%, transparent 100%); mask-image: radial-gradient(ellipse 58% 56% at 50% 48%, #000 45%, transparent 100%); }
+
+/* Map */
+.map-frame { border: 1px solid var(--color-line); border-radius: var(--radius-card); overflow: hidden; background: var(--color-blush); }
+.map-frame .leaflet-container { font-family: inherit; background: var(--color-blush); }
+.map-pin { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: #160F11; color: #F2D7D2; border: 2px solid #FBF3F1; box-shadow: 0 2px 6px rgb(0 0 0 / .25); }
+.map-pin svg { transform: rotate(45deg); }
+.map-pin.is-on { background: #6B1A2C; color: #fff; width: 38px; height: 38px; }
+.map-me { display: block; width: 18px; height: 18px; border-radius: 50%; background: #6B1A2C; border: 3px solid #fff; box-shadow: 0 0 0 6px rgb(107 26 44 / .25); }
+[data-theme='night'] .map-frame .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.85) contrast(.9); }
+
+/* Printing a poster or a sitter sheet: only that sheet goes on paper. */
+@media print {
+  body * { visibility: hidden !important; }
+  .poster, .poster * { visibility: visible !important; }
+  .poster { position: absolute; inset: 0; margin: 0; border: 0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

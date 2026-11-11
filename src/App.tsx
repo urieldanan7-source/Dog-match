@@ -14,6 +14,12 @@ const Store = lazy(() => import('./pages/Store'))
 const Insurance = lazy(() => import('./pages/Insurance'))
 const Toxic = lazy(() => import('./pages/Toxic'))
 const Health = lazy(() => import('./pages/Health'))
+const Places = lazy(() => import('./pages/Places'))
+const Zanbi = lazy(() => import('./pages/Zanbi'))
+const Lost = lazy(() => import('./pages/Lost'))
+const Kids = lazy(() => import('./pages/Kids'))
+const Adopt = lazy(() => import('./pages/Adopt'))
+const Sitters = lazy(() => import('./pages/Sitters'))
 const MyDogList = lazy(() => import('./pages/MyDog').then((m) => ({ default: m.MyDogList })))
 const MyDogProject = lazy(() => import('./pages/MyDog').then((m) => ({ default: m.MyDogProject })))
 const pick = (name: 'Emergency' | 'Accessibility' | 'NotFound') => lazy(() => import('./pages/Static').then((m) => ({ default: m[name] })))
@@ -41,6 +47,12 @@ function Shell() {
           <Route path="/insurance" element={<Insurance />} />
           <Route path="/toxic" element={<Toxic />} />
           <Route path="/health" element={<Health />} />
+          <Route path="/places" element={<Places />} />
+          <Route path="/zanbi" element={<Zanbi />} />
+          <Route path="/lost" element={<Lost />} />
+          <Route path="/kids" element={<Kids />} />
+          <Route path="/adopt" element={<Adopt />} />
+          <Route path="/sitters" element={<Sitters />} />
           <Route path="/emergency" element={<Emergency />} />
           <Route path="/accessibility" element={<Accessibility />} />
           <Route path="*" element={<NotFound />} />
