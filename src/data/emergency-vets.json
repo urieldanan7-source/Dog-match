@@ -1,0 +1,11 @@
+{
+ "note": "From a d.co.il article dated 2020-09-21 (https://www.d.co.il/Article10612/). Hours and phones must be verified before launch.",
+ "centers": [
+  {"name": "בית החולים הווטרינרי האוניברסיטאי", "city": "ראשון לציון", "phone": "072-3224107", "hours24": true},
+  {"name": "תיבת נח", "city": "אשדוד", "phone": "072-3225430", "hours24": true},
+  {"name": "בית חולים וטרינרי", "city": "באר שבע", "phone": "08-6460514", "hours24": null},
+  {"name": "טיפול נמרץ בן שמן", "city": "בן שמן", "phone": "072-3227134", "hours24": null},
+  {"name": "גל חיות", "city": "זכרון יעקב", "phone": "04-6291010", "hours24": null},
+  {"name": "מרכז וטרינרי לחיות בית", "city": "פרדס חנה", "phone": "04-6373011", "hours24": null}
+ ]
+}

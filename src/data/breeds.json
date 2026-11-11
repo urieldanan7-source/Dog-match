@@ -1,0 +1,948 @@
+{
+ "traits": [
+  {
+   "id": "shedding",
+   "name": "נשירה",
+   "mode": "max"
+  },
+  {
+   "id": "energy",
+   "name": "אנרגיה",
+   "mode": "target"
+  },
+  {
+   "id": "barking",
+   "name": "נביחות",
+   "mode": "max"
+  },
+  {
+   "id": "exercise",
+   "name": "צורך בפעילות",
+   "mode": "max"
+  },
+  {
+   "id": "trainability",
+   "name": "קלות אילוף",
+   "mode": "min"
+  },
+  {
+   "id": "kids",
+   "name": "ילדים",
+   "mode": "min"
+  },
+  {
+   "id": "pets",
+   "name": "חיות אחרות",
+   "mode": "min"
+  },
+  {
+   "id": "size",
+   "name": "גודל",
+   "mode": "max"
+  },
+  {
+   "id": "alone",
+   "name": "סבילות לבד",
+   "mode": "min"
+  },
+  {
+   "id": "grooming",
+   "name": "טיפוח",
+   "mode": "max"
+  },
+  {
+   "id": "heat",
+   "name": "עמידות בחום",
+   "mode": "min"
+  },
+  {
+   "id": "cost",
+   "name": "עלות",
+   "mode": "max"
+  }
+ ],
+ "breeds": [
+  {
+   "id": "labrador",
+   "name": "לברדור",
+   "scores": {
+    "shedding": 4,
+    "energy": 5,
+    "barking": 3,
+    "exercise": 5,
+    "trainability": 5,
+    "kids": 5,
+    "pets": 5,
+    "size": 4,
+    "alone": 2,
+    "grooming": 2,
+    "heat": 3,
+    "cost": 4
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 30,
+    "foodGramsPerDay": 390,
+    "waterLitersPerDay": 1.65,
+    "monthlyFoodILS": {
+     "budget": 130,
+     "premium": 290
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "golden",
+   "name": "גולדן רטריבר",
+   "scores": {
+    "shedding": 5,
+    "energy": 5,
+    "barking": 2,
+    "exercise": 5,
+    "trainability": 5,
+    "kids": 5,
+    "pets": 5,
+    "size": 4,
+    "alone": 2,
+    "grooming": 3,
+    "heat": 3,
+    "cost": 4
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 29.5,
+    "foodGramsPerDay": 385,
+    "waterLitersPerDay": 1.62,
+    "monthlyFoodILS": {
+     "budget": 125,
+     "premium": 290
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "gsd",
+   "name": "רועה גרמני",
+   "scores": {
+    "shedding": 4,
+    "energy": 5,
+    "barking": 3,
+    "exercise": 4,
+    "trainability": 5,
+    "kids": 5,
+    "pets": 3,
+    "size": 5,
+    "alone": 2,
+    "grooming": 3,
+    "heat": 3,
+    "cost": 4
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 35,
+    "foodGramsPerDay": 435,
+    "waterLitersPerDay": 1.93,
+    "monthlyFoodILS": {
+     "budget": 145,
+     "premium": 325
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "poodle",
+   "name": "פודל (טוי)",
+   "scores": {
+    "shedding": 1,
+    "energy": 3,
+    "barking": 4,
+    "exercise": 4,
+    "trainability": 5,
+    "kids": 5,
+    "pets": 3,
+    "size": 1,
+    "alone": 2,
+    "grooming": 5,
+    "heat": 3,
+    "cost": 3
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 3,
+    "foodGramsPerDay": 60,
+    "waterLitersPerDay": 0.17,
+    "monthlyFoodILS": {
+     "budget": 20,
+     "premium": 55
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "beagle",
+   "name": "ביגל",
+   "scores": {
+    "shedding": 3,
+    "energy": 5,
+    "barking": 4,
+    "exercise": 4,
+    "trainability": 4,
+    "kids": 4,
+    "pets": 5,
+    "size": 2,
+    "alone": 2,
+    "grooming": 1,
+    "heat": 3,
+    "cost": 2
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 12.5,
+    "foodGramsPerDay": 200,
+    "waterLitersPerDay": 0.69,
+    "monthlyFoodILS": {
+     "budget": 65,
+     "premium": 150
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "border-collie",
+   "name": "בורדר קולי",
+   "scores": {
+    "shedding": 3,
+    "energy": 5,
+    "barking": 4,
+    "exercise": 5,
+    "trainability": 5,
+    "kids": 4,
+    "pets": 3,
+    "size": 3,
+    "alone": 1,
+    "grooming": 3,
+    "heat": 3,
+    "cost": 3
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 17.5,
+    "foodGramsPerDay": 260,
+    "waterLitersPerDay": 0.96,
+    "monthlyFoodILS": {
+     "budget": 85,
+     "premium": 195
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "chihuahua",
+   "name": "צ'יוואווה",
+   "scores": {
+    "shedding": 3,
+    "energy": 3,
+    "barking": 4,
+    "exercise": 2,
+    "trainability": 4,
+    "kids": 1,
+    "pets": 3,
+    "size": 1,
+    "alone": 2,
+    "grooming": 1,
+    "heat": 3,
+    "cost": 2
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 2.5,
+    "foodGramsPerDay": 55,
+    "waterLitersPerDay": 0.14,
+    "monthlyFoodILS": {
+     "budget": 20,
+     "premium": 50
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "french-bulldog",
+   "name": "בולדוג צרפתי",
+   "scores": {
+    "shedding": 3,
+    "energy": 3,
+    "barking": 3,
+    "exercise": 2,
+    "trainability": 4,
+    "kids": 5,
+    "pets": 4,
+    "size": 2,
+    "alone": 3,
+    "grooming": 1,
+    "heat": 1,
+    "cost": 4
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 11,
+    "foodGramsPerDay": 160,
+    "waterLitersPerDay": 0.6,
+    "monthlyFoodILS": {
+     "budget": 55,
+     "premium": 120
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "shih-tzu",
+   "name": "שי צו",
+   "scores": {
+    "shedding": 1,
+    "energy": 3,
+    "barking": 4,
+    "exercise": 2,
+    "trainability": 4,
+    "kids": 5,
+    "pets": 5,
+    "size": 1,
+    "alone": 2,
+    "grooming": 5,
+    "heat": 2,
+    "cost": 3
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 6,
+    "foodGramsPerDay": 100,
+    "waterLitersPerDay": 0.33,
+    "monthlyFoodILS": {
+     "budget": 35,
+     "premium": 95
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "maltese",
+   "name": "מלטז",
+   "scores": {
+    "shedding": 1,
+    "energy": 3,
+    "barking": 4,
+    "exercise": 3,
+    "trainability": 3,
+    "kids": 3,
+    "pets": 3,
+    "size": 1,
+    "alone": 1,
+    "grooming": 5,
+    "heat": 3,
+    "cost": 3
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 3.5,
+    "foodGramsPerDay": 70,
+    "waterLitersPerDay": 0.19,
+    "monthlyFoodILS": {
+     "budget": 25,
+     "premium": 65
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "english-bulldog",
+   "name": "בולדוג אנגלי",
+   "scores": {
+    "shedding": 3,
+    "energy": 3,
+    "barking": 2,
+    "exercise": 3,
+    "trainability": 2,
+    "kids": 5,
+    "pets": 4,
+    "size": 3,
+    "alone": 3,
+    "grooming": 2,
+    "heat": 1,
+    "cost": 5
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 24,
+    "foodGramsPerDay": 285,
+    "waterLitersPerDay": 1.32,
+    "monthlyFoodILS": {
+     "budget": 95,
+     "premium": 215
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "pug",
+   "name": "פאג",
+   "scores": {
+    "shedding": 4,
+    "energy": 3,
+    "barking": 1,
+    "exercise": 2,
+    "trainability": 3,
+    "kids": 5,
+    "pets": 4,
+    "size": 1,
+    "alone": 3,
+    "grooming": 2,
+    "heat": 1,
+    "cost": 4
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 7,
+    "foodGramsPerDay": 115,
+    "waterLitersPerDay": 0.39,
+    "monthlyFoodILS": {
+     "budget": 40,
+     "premium": 105
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "yorkshire",
+   "name": "יורקשייר טרייר",
+   "scores": {
+    "shedding": 2,
+    "energy": 4,
+    "barking": 4,
+    "exercise": 5,
+    "trainability": 3,
+    "kids": 5,
+    "pets": 3,
+    "size": 1,
+    "alone": 2,
+    "grooming": 4,
+    "heat": 3,
+    "cost": 3
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 2.5,
+    "foodGramsPerDay": 55,
+    "waterLitersPerDay": 0.14,
+    "monthlyFoodILS": {
+     "budget": 20,
+     "premium": 50
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "dachshund",
+   "name": "דאקסהונד",
+   "scores": {
+    "shedding": 3,
+    "energy": 3,
+    "barking": 5,
+    "exercise": 3,
+    "trainability": 2,
+    "kids": 3,
+    "pets": 4,
+    "size": 2,
+    "alone": 2,
+    "grooming": 1,
+    "heat": 3,
+    "cost": 3
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 9,
+    "foodGramsPerDay": 140,
+    "waterLitersPerDay": 0.49,
+    "monthlyFoodILS": {
+     "budget": 45,
+     "premium": 130
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "husky",
+   "name": "הסקי סיבירי",
+   "scores": {
+    "shedding": 4,
+    "energy": 5,
+    "barking": 2,
+    "exercise": 5,
+    "trainability": 2,
+    "kids": 5,
+    "pets": 5,
+    "size": 4,
+    "alone": 2,
+    "grooming": 3,
+    "heat": 1,
+    "cost": 4
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 21,
+    "foodGramsPerDay": 295,
+    "waterLitersPerDay": 1.16,
+    "monthlyFoodILS": {
+     "budget": 95,
+     "premium": 220
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "boxer",
+   "name": "בוקסר",
+   "scores": {
+    "shedding": 4,
+    "energy": 5,
+    "barking": 3,
+    "exercise": 5,
+    "trainability": 4,
+    "kids": 5,
+    "pets": 3,
+    "size": 4,
+    "alone": 2,
+    "grooming": 1,
+    "heat": 2,
+    "cost": 4
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 27,
+    "foodGramsPerDay": 360,
+    "waterLitersPerDay": 1.49,
+    "monthlyFoodILS": {
+     "budget": 120,
+     "premium": 270
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "aussie",
+   "name": "רועה אוסטרלי",
+   "scores": {
+    "shedding": 3,
+    "energy": 5,
+    "barking": 4,
+    "exercise": 5,
+    "trainability": 5,
+    "kids": 5,
+    "pets": 3,
+    "size": 3,
+    "alone": 1,
+    "grooming": 3,
+    "heat": 3,
+    "cost": 3
+   },
+   "source": {
+    "shedding": "chayuta",
+    "energy": "chayuta",
+    "barking": "chayuta",
+    "exercise": "chayuta",
+    "trainability": "chayuta",
+    "kids": "chayuta",
+    "pets": "chayuta",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 24,
+    "foodGramsPerDay": 330,
+    "waterLitersPerDay": 1.32,
+    "monthlyFoodILS": {
+     "budget": 110,
+     "premium": 250
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "canaan",
+   "name": "כלב כנעני",
+   "scores": {
+    "shedding": 3,
+    "energy": 4,
+    "barking": 4,
+    "exercise": 4,
+    "trainability": 3,
+    "kids": 3,
+    "pets": 3,
+    "size": 3,
+    "alone": 3,
+    "grooming": 1,
+    "heat": 5,
+    "cost": 2
+   },
+   "source": {
+    "shedding": "estimate",
+    "energy": "estimate",
+    "barking": "estimate",
+    "exercise": "estimate",
+    "trainability": "estimate",
+    "kids": "estimate",
+    "pets": "estimate",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 20,
+    "foodGramsPerDay": 270,
+    "waterLitersPerDay": 1.1,
+    "monthlyFoodILS": {
+     "budget": 90,
+     "premium": 200
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "mixed-small",
+   "name": "מעורב קטן ורגוע",
+   "scores": {
+    "shedding": 2,
+    "energy": 2,
+    "barking": 3,
+    "exercise": 2,
+    "trainability": 3,
+    "kids": 4,
+    "pets": 4,
+    "size": 1,
+    "alone": 3,
+    "grooming": 2,
+    "heat": 4,
+    "cost": 2
+   },
+   "source": {
+    "shedding": "estimate",
+    "energy": "estimate",
+    "barking": "estimate",
+    "exercise": "estimate",
+    "trainability": "estimate",
+    "kids": "estimate",
+    "pets": "estimate",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 8,
+    "foodGramsPerDay": 110,
+    "waterLitersPerDay": 0.44,
+    "monthlyFoodILS": {
+     "budget": 35,
+     "premium": 100
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "mixed-medium",
+   "name": "מעורב בינוני ופעיל",
+   "scores": {
+    "shedding": 3,
+    "energy": 4,
+    "barking": 3,
+    "exercise": 4,
+    "trainability": 3,
+    "kids": 4,
+    "pets": 3,
+    "size": 3,
+    "alone": 3,
+    "grooming": 2,
+    "heat": 4,
+    "cost": 2
+   },
+   "source": {
+    "shedding": "estimate",
+    "energy": "estimate",
+    "barking": "estimate",
+    "exercise": "estimate",
+    "trainability": "estimate",
+    "kids": "estimate",
+    "pets": "estimate",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 18,
+    "foodGramsPerDay": 250,
+    "waterLitersPerDay": 0.99,
+    "monthlyFoodILS": {
+     "budget": 80,
+     "premium": 190
+    },
+    "source": "estimate"
+   }
+  },
+  {
+   "id": "mixed-large",
+   "name": "מעורב גדול ורגוע",
+   "scores": {
+    "shedding": 3,
+    "energy": 2,
+    "barking": 3,
+    "exercise": 3,
+    "trainability": 3,
+    "kids": 4,
+    "pets": 4,
+    "size": 4,
+    "alone": 3,
+    "grooming": 2,
+    "heat": 4,
+    "cost": 3
+   },
+   "source": {
+    "shedding": "estimate",
+    "energy": "estimate",
+    "barking": "estimate",
+    "exercise": "estimate",
+    "trainability": "estimate",
+    "kids": "estimate",
+    "pets": "estimate",
+    "size": "estimate",
+    "alone": "estimate",
+    "grooming": "estimate",
+    "heat": "estimate",
+    "cost": "estimate"
+   },
+   "care": {
+    "weightKg": 30,
+    "foodGramsPerDay": 290,
+    "waterLitersPerDay": 1.65,
+    "monthlyFoodILS": {
+     "budget": 95,
+     "premium": 215
+    },
+    "source": "estimate"
+   }
+  }
+ ]
+}

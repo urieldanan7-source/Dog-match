@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* Design tokens: direction B, "fresh and modern" */
+@theme {
+  --color-bg: #F3F8F7;
+  --color-surface: #FFFFFF;
+  --color-ink: #0F2A33;
+  --color-ink-soft: #45606A;
+  --color-line: #D5E3E1;
+  --color-accent: #0E7C74;
+  --color-accent-strong: #0A5C56;
+  --color-accent-tint: #DCEBE9;
+  --color-coral: #E8684A;
+  --color-warn-bg: #FDE9E3;
+  --color-warn-ink: #7A2E1B;
+  --color-good-bg: #E1F1EA;
+  --color-good-ink: #1F5A40;
+  --color-night: #0B1418;
+  --font-display: "Rubik", system-ui, sans-serif;
+  --font-body: "Assistant", system-ui, sans-serif;
+  --radius-card: 24px;
+  --radius-pill: 999px;
+  --ease-out-soft: cubic-bezier(.22, 1, .36, 1);
+}
+
+:root {
+  --accent: var(--color-accent);
+  --accent-strong: var(--color-accent-strong);
+}
+
+@layer base {
+html { background: var(--color-bg); color: var(--color-ink); font-family: var(--font-body); font-size: 100%; }
+body { margin: 0; min-height: 100dvh; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; line-height: 1.15; margin: 0; }
+a { color: var(--accent-strong); }
+:focus-visible { outline: 3px solid var(--color-ink); outline-offset: 3px; border-radius: 6px; }
+.on-dark :focus-visible { outline-color: #FFFFFF; }
+
+  [tabindex="-1"]:focus-visible { outline: none; }
+}
+
+.skip-link { position: absolute; inset-inline-start: 8px; top: -60px; background: var(--color-ink); color: #fff; padding: 12px 16px; border-radius: 8px; z-index: 100; }
+.skip-link:focus { top: 8px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 28px; border-radius: var(--radius-pill); border: 2px solid transparent; font-family: var(--font-display); font-weight: 500; font-size: 1.0625rem; text-decoration: none; cursor: pointer; position: relative; overflow: hidden; transition: transform .15s var(--ease-out-soft), background-color .2s; }
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-strong); }
+.btn-ghost { background: transparent; color: var(--color-ink); border-color: var(--color-ink); }
+.btn-light { background: #F3F1EC; color: #07080B; }
+.btn-outline-light { background: transparent; color: #F3F1EC; border-color: #F3F1EC; }
+
+.card { background: var(--color-surface); border-radius: var(--radius-card); box-shadow: 0 10px 30px rgb(15 42 51 / .08); }
+
+.paw { position: absolute; width: 22px; height: 22px; pointer-events: none; opacity: 0; animation: paw .6s ease-out forwards; }
+@keyframes paw { 0% { opacity: .55; transform: translate(-50%, -50%) scale(.4) rotate(-12deg); } 100% { opacity: 0; transform: translate(-50%, -50%) scale(1.5) rotate(8deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+}
+
+/* Night mode: same tokens, dark values. */
+[data-theme="night"] {
+  --color-bg: #0B1418; --color-surface: #14232A; --color-ink: #EEF5F4; --color-ink-soft: #A9BFC2;
+  --color-line: #2A3D45; --color-accent-tint: #18343A; --color-warn-bg: #3A1D15; --color-warn-ink: #FFD2C4;
+  --color-good-bg: #143326; --color-good-ink: #BFEBD3;
+  --accent: #5CC9BF; --accent-strong: #8FE0D8;
+}
+[data-theme="night"] .btn-primary { color: #06201D; }
+[data-theme="night"] .card { box-shadow: none; border: 1px solid var(--color-line); }
+
+/* The cinematic stage (dark, in the breed's colours). */
+.stage { --stage: #0E0F12; --glow: #2A2D33; --stage-accent: #0E7C74; background: var(--stage); color: #F3F1EC; }
+.stage-bg { position: fixed; inset: 0; background: radial-gradient(ellipse 80% 70% at 50% 62%, var(--glow) 0%, color-mix(in srgb, var(--glow) 35%, var(--stage)) 45%, var(--stage) 100%); }
+.stage-vignette { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(ellipse 90% 85% at 50% 50%, transparent 55%, rgb(0 0 0 / .55) 100%); }
+.stage-grain { position: fixed; inset: 0; pointer-events: none; opacity: .04; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.tag { display: inline-block; align-self: flex-start; padding: 4px 10px; background: #F3F1EC; color: #07080B; font-size: .8125rem; font-weight: 700; }
+.display { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; line-height: .98; }
+
+/* Iris: the light goes out from the edges inward. */
+.iris { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden; }
+.iris > span { position: absolute; inset: 0; --r: 110vmax; background: radial-gradient(circle at 50% 50%, transparent var(--r), var(--iris, #07080B) calc(var(--r) + 2vmax)); }
+
+.hotspot { width: 44px; height: 44px; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--stage-accent) 70%, transparent); display: grid; place-items: center; animation: pulse 1.8s ease-in-out infinite; }
+.hotspot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #fff; }
+@keyframes pulse { 50% { transform: scale(1.18); opacity: .7; } }
+@keyframes float { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(var(--dx), -110vh, 0); } }
+@keyframes bob { 50% { transform: translateY(-5px); } }
+@keyframes wag { 25% { transform: rotate(-7deg); } 75% { transform: rotate(7deg); } }
+.bob { animation: bob 3.2s ease-in-out infinite; }
+.wag { animation: wag .5s ease-in-out 4; }
+
+.field { width: 100%; min-height: 52px; padding: 0 16px; border-radius: 14px; border: 2px solid var(--color-ink-soft); background: var(--color-surface); color: var(--color-ink); font: inherit; }
+.no-scrollbar { scrollbar-width: none; } .no-scrollbar::-webkit-scrollbar { display: none; }
+
+.stage-canvas { -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent); mask-image: linear-gradient(to bottom, #000 78%, transparent); }
+@media (min-width: 40rem) { .stage-canvas { -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 90%, transparent); mask-image: linear-gradient(to right, transparent, #000 6%, #000 90%, transparent); } }
