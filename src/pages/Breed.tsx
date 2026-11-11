@@ -8,7 +8,8 @@ import { Back, Check, Close } from '../components/Icons'
 import { reducedMotion, useIris } from '../components/Iris'
 import { TraitBar } from '../components/TraitBar'
 import { themeFor } from '../lib/breedTheme'
-import { dogImage, type StopId } from '../lib/dogAssets'
+import { dogImage, dogTurntable, type StopId } from '../lib/dogAssets'
+import { TurntableStage } from '../components/TurntableStage'
 import { breedById, traits, type Breed as BreedT } from '../lib/scoring'
 import { actions, useStore } from '../lib/store'
 import { askText, goodAndBad, levelText, stops, tagline, type Stop } from '../lib/traitCopy'
@@ -176,6 +177,7 @@ export default function Breed() {
   const jump = (s: string) => scroller.current?.querySelector<HTMLElement>(`[data-stop="${s}"]`)?.scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth' })
   const section = 'relative flex min-h-dvh snap-start flex-col justify-end sm:justify-center sm:ps-[6vw]'
   const vars = { '--stage': theme.stage, '--glow': theme.glow, '--stage-accent': theme.accent } as CSSProperties
+  const table = dogTurntable(breed.id)
   const dimmed = stop === 'info'
   const centered = stop === 'finale' || stop === 'info'
 
@@ -185,7 +187,11 @@ export default function Breed() {
       <div className="stage-bg" aria-hidden="true" />
       <Particles />
       <div aria-hidden="true" className={`stage-canvas pointer-events-none fixed inset-x-0 top-0 h-[58dvh] transition-opacity duration-500 sm:inset-y-0 sm:right-auto sm:h-auto sm:w-[58%] sm:transition-all sm:duration-700 ${centered ? 'sm:left-[21%]' : 'sm:left-0'}`} style={{ opacity: dimmed ? 0.12 : 1 }}>
-        {use3d ? (
+        {table && !reducedMotion() ? (
+          <TurntableStage breedId={breed.id} stop={shot} />
+        ) : table ? (
+          <img src={table.poster} alt="" className="turntable h-full w-full object-contain" />
+        ) : use3d ? (
           <Suspense fallback={<img src={dogImage(breed.id)} alt="" className="h-full w-full object-contain p-8 opacity-60" />}>
             <DogStage breedId={breed.id} stop={shot} accent={theme.accent} glow={theme.glow} lowPower={lowPower} />
           </Suspense>
