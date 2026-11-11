@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import { IrisProvider } from './components/Iris'
 import { usePawPrints, useTheme } from './components/Layout'
 import Home from './pages/Home'
@@ -63,5 +63,7 @@ function Shell() {
 }
 
 export default function App() {
+  // The one-file build opens straight from disk, where only hash links work.
+  if (import.meta.env.MODE === 'single') return <HashRouter><Shell /></HashRouter>
   return <BrowserRouter basename={import.meta.env.BASE_URL}><Shell /></BrowserRouter>
 }

@@ -1,3 +1,4 @@
+import packed from 'virtual:packed-dogs'
 /**
  * The one place that maps a breed to its visuals. Replacing the prototype dogs with
  * better models means swapping files in public/dogs and, if the rig differs, the anchors here.
@@ -8,9 +9,27 @@ export type StopId = 'intro' | 'head' | 'mouth' | 'legs' | 'coat' | 'body' | 'fi
 const file = (id: string) => (id.startsWith('mixed') ? 'mixed' : id.replaceAll('-', '_'))
 const base = import.meta.env.BASE_URL + 'dogs/'
 
-export const dogImage = (id: string) => `${base}${file(id)}.webp`
-export const dogRun = (id: string) => `${base}${file(id)}_run.webp`
-export const dogModel = (id: string) => `${base}${file(id)}.glb`
+/**
+ * In the one-file build (npm run build:single) every dog file is packed inside the HTML as data.
+ * Big files are turned into blob URLs on first use, so video seeking and model loading stay fast.
+ */
+const blobs = new Map<string, string>()
+const url = (name: string) => {
+  if (import.meta.env.MODE !== 'single') return base + name
+  const data = packed[name]
+  if (!data || !/\.(glb|mp4)$/.test(name)) return data ?? ''
+  if (!blobs.has(name)) {
+    const [head, b64] = data.split(',')
+    const bin = atob(b64), bytes = new Uint8Array(bin.length)
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i)
+    blobs.set(name, URL.createObjectURL(new Blob([bytes], { type: head.slice(5, head.indexOf(';')) })))
+  }
+  return blobs.get(name)!
+}
+
+export const dogImage = (id: string) => url(`${file(id)}.webp`)
+export const dogRun = (id: string) => url(`${file(id)}_run.webp`)
+export const dogModel = (id: string) => url(`${file(id)}.glb`)
 
 /** Camera shots in model space (x forward, y up). `anchor` is where the hotspot dot sits. */
 export const shots: Record<StopId, { position: Vec3; target: Vec3; anchor?: Vec3 }> = {
@@ -32,7 +51,7 @@ export interface Framing { t: number; x: number; y: number; zoom: number }
 type Turntable = { src: string; poster: string; shots: Record<StopId, Framing> }
 const f = (t: number, x = 50, y = 50, zoom = 1): Framing => ({ t, x, y, zoom })
 const turn = (id: string, shotsFor: Record<StopId, Framing>): Turntable =>
-  ({ src: `${base}real/${id}.mp4`, poster: `${base}real/${id}.jpg`, shots: shotsFor })
+  ({ get src() { return url(`real/${id}.mp4`) }, poster: url(`real/${id}.jpg`), shots: shotsFor })
 
 const turntables: Record<string, Turntable> = {
   'border-collie': turn('border_collie', {
