@@ -34,7 +34,7 @@ const paragraph = (breed: BreedT, stop: Stop) =>
 
 /** Hair and dust drifting in the light. */
 function Particles() {
-  const dots = useMemo(() => Array.from({ length: 22 }, (_, i) => ({
+  const dots = useMemo(() => Array.from({ length: 12 }, (_, i) => ({
     left: (i * 37) % 100, size: 2 + (i % 3), delay: -(i * 1.7), dur: 16 + (i % 7) * 3, dx: ((i % 5) - 2) * 18, op: 0.3 + (i % 4) * 0.1,
   })), [])
   return (
@@ -46,7 +46,7 @@ function Particles() {
   )
 }
 
-const SHEET = 'min-h-[45dvh] gap-3 rounded-t-[28px] bg-[rgb(7_8_11/.72)] p-6 pb-8 backdrop-blur-md sm:min-h-0 sm:w-[460px] sm:gap-4 sm:rounded-[20px] sm:pb-7'
+const SHEET = 'min-h-[45dvh] gap-3 rounded-t-[6px] border-t border-white/10 bg-[rgb(17_11_13/.92)] p-6 pb-8 sm:min-h-0 sm:w-[460px] sm:gap-4 sm:rounded-[6px] sm:border sm:pb-7'
 
 function Block({ active, children, className = '' }: { active: boolean; children: React.ReactNode; className?: string }) {
   const still = reducedMotion()
@@ -79,10 +79,11 @@ function MyDog({ breed }: { breed: BreedT }) {
         </div>
       ) : (
         <button
-          type="button" className="btn" disabled={mine} style={{ background: 'var(--stage-accent)', color: '#07080B' }}
+          type="button" className="btn" disabled={mine} style={{ background: '#F2D7D2', color: '#160F11' }}
           onClick={() => (myDogs.length && !mine ? setState('ask') : choose(false))}
         >{mine ? <><Check />זה הכלב שלכם</> : 'זה הכלב שלי'}</button>
       )}
+      {mine && <Link to="/my-dog" className="link text-[#F2D7D2]">לפתוח לו פרויקט: תזכורות, אוכל וחיסונים</Link>}
       <p role="status" className="sr-only">{state === 'done' ? `${breed.name} הוא עכשיו הכלב המלווה שלכם` : ''}</p>
       {state === 'fly' && (
         <motion.img
@@ -102,35 +103,35 @@ function Info({ breed }: { breed: BreedT }) {
     <motion.div
       initial={still ? false : { rotateY: 80, opacity: 0 }} whileInView={{ rotateY: 0, opacity: 1 }} viewport={{ once: true, amount: 0.08 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="mx-auto w-full max-w-3xl rounded-[28px] bg-[#F3F1EC] p-6 text-[#0F2A33] sm:p-9" style={{ transformPerspective: 1400 }}
+      className="mx-auto w-full max-w-3xl rounded-[6px] bg-[#FBF3F1] p-6 text-[#160F11] sm:p-10" style={{ transformPerspective: 1400 }}
     >
       <h2 id="info-h" tabIndex={-1} className="display text-4xl outline-none sm:text-5xl">הטוב והרע</h2>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        <div className="rounded-2xl bg-[#E1F1EA] p-4 text-[#1F5A40]">
-          <h3 className="text-lg">הטוב</h3>
+        <div className="border-t-2 border-[#160F11] pt-4">
+          <h3 className="text-2xl">הטוב</h3>
           <ul className="m-0 mt-2 list-disc ps-5 font-semibold">{good.length ? good.map((t) => <li key={t}>{levelText(t, breed.scores[t])}</li>) : <li>אין תכונה שבולטת לטובה בציונים.</li>}</ul>
         </div>
-        <div className="rounded-2xl bg-[#FDE9E3] p-4 text-[#7A2E1B]">
-          <h3 className="text-lg">הרע</h3>
+        <div className="border-t-2 border-[#6B1A2C] pt-4 text-[#6B1A2C]">
+          <h3 className="text-2xl">הרע</h3>
           <ul className="m-0 mt-2 list-disc ps-5 font-semibold">{bad.length ? bad.map((t) => <li key={t}>{levelText(t, breed.scores[t])}</li>) : <li>אין תכונה קיצונית לרעה בציונים. עדיין, כל כלב דורש זמן, כסף וסבלנות.</li>}</ul>
         </div>
       </div>
 
       <h3 className="mt-8 text-2xl">כל התכונות</h3>
       <div className="mt-4 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-        {traits.map((t) => <TraitBar key={t.id} breed={breed} trait={t.id} color="#0F2A33" track="#D9D5CB" />)}
+        {traits.map((t) => <TraitBar key={t.id} breed={breed} trait={t.id} color="#6B1A2C" track="#F2D7D2" />)}
       </div>
 
       <h3 className="mt-8 text-2xl">אוכל, מים ועלות</h3>
       <dl className="m-0 mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[['משקל ממוצע', `${c.weightKg} ק״ג`], ['אוכל יבש ביום', `${c.foodGramsPerDay} גרם`], ['מים ביום', `${c.waterLitersPerDay} ליטר`], ['אוכל בחודש', `${c.monthlyFoodILS.budget} עד ${c.monthlyFoodILS.premium} ₪`]].map(([k, v]) => (
-          <div key={k} className="rounded-2xl bg-white p-3">
-            <dt className="text-sm font-semibold text-[#45606A]">{k}</dt>
-            <dd className="m-0 font-display text-xl font-bold">{v}</dd>
+          <div key={k} className="border-t border-[#E3C9C3] pt-3">
+            <dt className="text-sm text-[#5C4A4F]">{k}</dt>
+            <dd className="m-0 font-display text-2xl font-bold">{v}</dd>
           </div>
         ))}
       </dl>
-      <p className="mt-3 text-[.9375rem] text-[#45606A]">
+      <p className="mt-4 text-[.9375rem] text-[#5C4A4F]">
         המספרים הם הערכה לכלב בוגר במשקל ממוצע. הכמות המדויקת היא לפי ההוראות על שק המזון והווטרינר. העלות הכוללת בחודש, עם וטרינר, ציוד וטיפוח: {levelText('cost', breed.scores.cost)}.
       </p>
     </motion.div>
@@ -144,7 +145,7 @@ export default function Breed() {
   const theme = themeFor(breed?.id)
   const scroller = useRef<HTMLDivElement>(null)
   const [stop, setStop] = useState<StopId | 'info'>('intro')
-  const [progress, setProgress] = useState(0)
+  const bar = useRef<HTMLDivElement>(null)
   const [use3d] = useState(() => !reducedMotion() && hasWebGL())
   const lowPower = useMemo(() => (navigator.hardwareConcurrency ?? 8) <= 4 || window.innerWidth < 640, [])
 
@@ -201,7 +202,7 @@ export default function Breed() {
       </div>
       <div className="stage-vignette" aria-hidden="true" />
       <div className="stage-grain" aria-hidden="true" />
-      <div aria-hidden="true" className="fixed inset-x-0 top-0 z-40 h-0.5 bg-white/15"><div className="h-0.5" style={{ width: `${progress * 100}%`, background: 'var(--stage-accent)' }} /></div>
+      <div aria-hidden="true" className="fixed inset-x-0 top-0 z-40 h-0.5 bg-white/15"><div ref={bar} className="h-0.5 origin-right will-change-transform" style={{ transform: 'scaleX(0)', background: 'var(--stage-accent)' }} /></div>
 
       <div className="fixed inset-x-0 top-0 z-30">
         <Header onDark />
@@ -223,14 +224,18 @@ export default function Breed() {
       <div
         ref={scroller} id="main" tabIndex={-1}
         className="no-scrollbar relative z-10 h-dvh snap-y snap-proximity overflow-y-auto outline-none"
-        onScroll={(e) => { const el = e.currentTarget; setProgress(el.scrollTop / Math.max(1, el.scrollHeight - el.clientHeight)) }}
+        onScroll={(e) => {
+          // Straight to the DOM: a state update here would re-render the whole stage on every scroll event.
+          const el = e.currentTarget
+          if (bar.current) bar.current.style.transform = `scaleX(${el.scrollTop / Math.max(1, el.scrollHeight - el.clientHeight)})`
+        }}
       >
         <main>
           <section data-stop="intro" aria-labelledby="breed-h" className={section}>
             <Block active={stop === 'intro'} className="p-6 pb-12 sm:w-[520px] sm:p-0">
               <h1 id="breed-h" className="display text-[4rem] sm:text-[6rem]">{breed.name}</h1>
-              <p className="m-0 text-lg text-[#E4E7EC]">{tagline(breed)}</p>
-              <p className="m-0 text-[.9375rem] font-semibold text-[#E4E7EC]">גללו למטה לסיור בגוף</p>
+              <p className="m-0 text-lg text-[#F2D7D2]">{tagline(breed)}</p>
+              <p className="m-0 text-[.9375rem] font-semibold text-[#F2D7D2]">גללו למטה לסיור בגוף</p>
             </Block>
           </section>
 
@@ -239,7 +244,7 @@ export default function Breed() {
               <Block active={stop === s.id} className={SHEET}>
                 <span className="tag">{n + 1} · {s.part} · {s.label}</span>
                 <h2 id={`stop-${s.id}`} className="display text-[2.125rem] sm:text-[3.25rem]">{headline(breed, s)}</h2>
-                {paragraph(breed, s) && <p className="m-0 text-lg leading-relaxed text-[#E4E7EC]">{paragraph(breed, s)}</p>}
+                {paragraph(breed, s) && <p className="m-0 text-lg leading-relaxed text-[#F2D7D2]">{paragraph(breed, s)}</p>}
                 {s.traits.map((t) => <TraitBar key={t} breed={breed} trait={t} color="var(--stage-accent)" track="rgb(243 241 236 / .2)" withText={s.traits.length > 1 && s.id !== 'body' || (s.id === 'body' && t !== 'size')} />)}
               </Block>
             </section>

@@ -15,8 +15,8 @@ export function TraitBar({ breed, trait, color = 'var(--accent)', track = 'var(-
         </span>
         <span className="text-end">{withText && <span className="font-normal opacity-90">{levelText(trait, v)} · </span>}{pct(v)}%</span>
       </div>
-      <div className="h-2 rounded-full" style={{ background: track }} aria-hidden="true">
-        <div className="h-2 rounded-full" style={{ width: `${pct(v)}%`, background: color }} />
+      <div className="h-1" style={{ background: track }} aria-hidden="true">
+        <div className="h-1" style={{ width: `${pct(v)}%`, background: color }} />
       </div>
     </div>
   )

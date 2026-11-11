@@ -1,7 +1,6 @@
 import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Html, useGLTF } from '@react-three/drei'
-import { Bloom, EffectComposer } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import { dogModel, shots, type StopId } from '../lib/dogAssets'
 
@@ -81,7 +80,7 @@ function Dog({ breedId, stop, accent }: { breedId: string; stop: StopId; accent:
 export default function DogStage({ breedId, stop, accent, glow, lowPower }: Props) {
   const focused = !!shots[stop].anchor
   return (
-    <Canvas dpr={[1, lowPower ? 1.5 : 2]} camera={{ fov: 32, near: 0.1, far: 30, position: shots.intro.position }} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }} aria-hidden="true">
+    <Canvas dpr={[1, lowPower ? 1.25 : 1.75]} camera={{ fov: 32, near: 0.1, far: 30, position: shots.intro.position }} gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }} aria-hidden="true">
       <ambientLight intensity={focused ? 0.35 : 0.8} />
       <directionalLight position={[2.5, 4, 3]} intensity={focused ? 1.1 : 2.2} />
       <directionalLight position={[-3, 2.2, -3]} intensity={2.4} color={accent} />
@@ -90,9 +89,6 @@ export default function DogStage({ breedId, stop, accent, glow, lowPower }: Prop
         <Dog key={breedId} breedId={breedId} stop={stop} accent={accent} />
       </Suspense>
       <Rig stop={stop} />
-      <EffectComposer multisampling={lowPower ? 0 : 4}>
-        <Bloom luminanceThreshold={0.8} intensity={0.4} mipmapBlur />
-      </EffectComposer>
     </Canvas>
   )
 }

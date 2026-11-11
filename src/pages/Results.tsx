@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useLocation } from 'react-router-dom'
 import { Page } from '../components/Layout'
-import { Alert, Forward, Share } from '../components/Icons'
+import { Alert, Check, Forward, Share } from '../components/Icons'
+import { Arch } from '../components/ui'
 import { reducedMotion, useIris } from '../components/Iris'
 import { themeFor } from '../lib/breedTheme'
 import { dogImage, dogRun } from '../lib/dogAssets'
@@ -56,31 +57,31 @@ function Card({ m, rank, profile, lead }: { m: Match; rank: number; profile: Pro
   if (profile.flags.hardVetBill && FLAT_FACED.includes(id)) warnings.push('כלבים עם פנים שטוחות יקרים בווטרינר יותר מהממוצע. כדאי לבדוק ביטוח.')
   if (profile.flags.stairs && id === 'dachshund') warnings.push('מדרגות רבות מסוכנות לגב של דאקסהונד.')
   return (
-    <li className="card p-5" style={lead ? { outline: '3px solid var(--accent)' } : undefined}>
-      <div className="flex items-center gap-4">
-        <img src={dogImage(id)} alt="" width={84} height={84} loading="lazy" className="h-[84px] w-[84px] shrink-0 rounded-2xl bg-accent-tint object-contain" />
+    <li className={lead ? 'bg-[#160F11] p-5 text-[#F6E4E2] sm:p-8' : 'border-t border-line py-6'} style={lead ? { borderRadius: 6 } : undefined}>
+      <div className="flex items-center gap-4 sm:gap-6">
+        <Arch id={id} className={`shrink-0 ${lead ? 'h-36 w-28 sm:h-48 sm:w-40' : 'h-24 w-20'}`} />
         <div className="min-w-0 flex-1">
-          <p className="m-0 text-sm font-semibold text-ink-soft">{lead ? 'ההתאמה הכי גבוהה' : `מקום ${rank}`}</p>
-          <h3 className="text-2xl font-bold">{m.breed.name}</h3>
+          <span className="eyebrow" style={lead ? { color: '#E7A9A0' } : undefined}>{lead ? 'הכי מתאים לכם' : `מקום ${rank}`}</span>
+          <h3 className={`mt-1 font-bold ${lead ? 'text-4xl sm:text-5xl' : 'text-2xl sm:text-3xl'}`}>{m.breed.name}</h3>
         </div>
-        <p className="m-0 font-display text-4xl font-extrabold" style={{ color: 'var(--accent-strong)' }}>
-          {m.percent}%<span className="sr-only"> התאמה</span>
+        <p className={`numeral m-0 ${lead ? 'text-6xl sm:text-8xl' : 'text-5xl'}`} style={{ color: lead ? '#F2D7D2' : 'var(--accent)' }}>
+          {m.percent}<span className="text-[.5em]">%</span><span className="sr-only"> התאמה</span>
         </p>
       </div>
       {warnings.map((w) => (
-        <p key={w} className="m-0 mt-3 flex gap-2 rounded-xl bg-warn-bg p-3 font-semibold text-warn-ink"><Alert className="shrink-0" />{w}</p>
+        <p key={w} className="m-0 mt-4 flex gap-2 border-s-4 bg-warn-bg p-3 font-semibold text-warn-ink" style={{ borderColor: 'var(--color-warn-ink)' }}><Alert className="shrink-0" />{w}</p>
       ))}
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <div>
-          <h4 className="m-0 font-display text-base font-bold">למה הוא מתאים</h4>
-          <ul className="m-0 mt-1 list-disc ps-5">{m.reasons.map((t) => <li key={t}>{levelText(t, m.breed.scores[t])}</li>)}</ul>
+          <h4 className="m-0 text-sm font-semibold tracking-wider" style={{ color: lead ? '#E7A9A0' : 'var(--accent)' }}>למה הוא מתאים</h4>
+          <ul className="m-0 mt-2 grid list-none gap-1 p-0">{m.reasons.map((t) => <li key={t} className="flex gap-2"><Check width={18} height={18} className="mt-1 shrink-0" />{levelText(t, m.breed.scores[t])}</li>)}</ul>
         </div>
-        <div className="rounded-xl bg-accent-tint p-3">
-          <h4 className="m-0 font-display text-base font-bold">כדאי שתדע</h4>
-          <ul className="m-0 mt-1 list-disc ps-5">{caveatsFor(m).map((c) => <li key={c}>{c}</li>)}</ul>
+        <div className={lead ? 'border-s border-[#3A2328] ps-5' : 'border-s border-line ps-5'}>
+          <h4 className="m-0 text-sm font-semibold tracking-wider" style={{ color: lead ? '#E7A9A0' : 'var(--accent)' }}>כדאי שתדע</h4>
+          <ul className="m-0 mt-2 grid list-none gap-1 p-0">{caveatsFor(m).map((c) => <li key={c} className="flex gap-2"><Alert width={18} height={18} className="mt-1 shrink-0" />{c}</li>)}</ul>
         </div>
       </div>
-      <button type="button" className="btn btn-primary mt-4 w-full sm:w-auto" onClick={() => go(`/breed/${id}`, { color: themeFor(id).stage })}>
+      <button type="button" className={`btn mt-6 w-full sm:w-auto ${lead ? 'btn-light' : 'btn-ghost'}`} onClick={() => go(`/breed/${id}`, { color: themeFor(id).stage })}>
         עוד על {m.breed.name}<Forward />
       </button>
     </li>
@@ -98,8 +99,8 @@ export default function Results() {
   if (answered < coreQuestions.length) {
     return (
       <Page title="התוצאות">
-        <section className="card mt-8 p-6 text-center">
-          <h1 className="text-3xl">עוד אין תוצאות</h1>
+        <section className="mt-12 bg-blush p-8 text-center" style={{ borderRadius: 6 }}>
+          <h1 className="text-4xl">עוד אין תוצאות</h1>
           <p className="text-ink-soft">עניתם על {answered} מתוך {coreQuestions.length} שאלות. צריך את כולן כדי לחשב התאמה.</p>
           <Link to="/quiz" className="btn btn-primary">{answered ? 'להמשיך מאיפה שעצרתם' : 'להתחיל את השאלון'}</Link>
         </section>
@@ -129,9 +130,10 @@ export default function Results() {
 
   return (
     <Page title="התוצאות" wag={!!state?.justFinished}>
-      <h1 className="pt-4 text-4xl font-extrabold">{notYet ? 'עוד לא' : 'הכלבים שמתאימים לכם'}</h1>
+      <span className="eyebrow mt-10">התוצאות שלכם</span>
+      <h1 className="mt-2 text-[2.75rem] font-black leading-none sm:text-6xl">{notYet ? 'עוד לא' : 'הכלבים שמתאימים לכם'}</h1>
       {notYet ? (
-        <p className="mt-3 rounded-2xl bg-warn-bg p-4 text-lg text-warn-ink">
+        <p className="mt-4 border-s-4 bg-warn-bg p-4 text-lg text-warn-ink" style={{ borderColor: 'var(--color-warn-ink)' }}>
           לפי התשובות שלכם, אף כלב ברשימה לא מגיע ל־60% התאמה. זה לא אומר שלא תוכלו לגדל כלב, אלא שכדאי לשנות משהו קודם: יותר זמן ביום, תקציב אחר או ציפיות אחרות. אלה הקרובים ביותר בינתיים.
         </p>
       ) : (
@@ -139,17 +141,17 @@ export default function Results() {
       )}
       {!notYet && <Lineup top={top} animate={!!state?.justFinished && !reducedMotion()} />}
 
-      {profile.notes.map((n) => <p key={n} className="mt-4 flex gap-2 rounded-2xl bg-accent-tint p-4"><Alert className="shrink-0" />{n}</p>)}
-      {profile.options.allergy && <p className="mt-4 rounded-2xl bg-accent-tint p-4">בגלל האלרגיה מוצגים רק כלבים שנושרים מעט. אין כלב שלא גורם לאלרגיה בכלל, אז כדאי לבלות זמן עם הכלב לפני שמחליטים.</p>}
+      {profile.notes.map((n) => <p key={n} className="mt-4 flex gap-2 border-s-4 border-ink bg-blush p-4"><Alert className="shrink-0" />{n}</p>)}
+      {profile.options.allergy && <p className="mt-4 border-s-4 border-ink bg-blush p-4">בגלל האלרגיה מוצגים רק כלבים שנושרים מעט. אין כלב שלא גורם לאלרגיה בכלל, אז כדאי לבלות זמן עם הכלב לפני שמחליטים.</p>}
 
-      <ol className="m-0 mt-5 grid list-none gap-4 p-0">
+      <ol className="m-0 mt-8 grid list-none gap-0 p-0">
         {top.map((m, i) => <Card key={m.breed.id} m={m} rank={i + 1} profile={profile} lead={i === 0 && !notYet} />)}
       </ol>
 
       {over.length > 0 && (
-        <details className="card mt-5 p-5">
+        <details className="mt-8 border-t-2 border-ink pt-4">
           <summary className="min-h-11 cursor-pointer content-center font-display text-lg font-bold">{over.length} כלבים שירדו לתחתית בגלל התקציב</summary>
-          <ol className="m-0 mt-3 grid list-none gap-4 p-0">
+          <ol className="m-0 mt-3 grid list-none p-0">
             {over.map((m, i) => <Card key={m.breed.id} m={m} rank={inBudget.length + i + 1} profile={profile} lead={false} />)}
           </ol>
         </details>

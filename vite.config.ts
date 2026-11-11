@@ -16,7 +16,7 @@ export default defineConfig({
         short_name: 'כלב מתאים',
         description: 'שאלון קצר שמראה אילו כלבים מתאימים לחיים שלכם, עם הטוב והרע של כל אחד.',
         lang: 'he', dir: 'rtl', display: 'standalone', start_url: '.',
-        background_color: '#F3F8F7', theme_color: '#0E7C74',
+        background_color: '#FBF3F1', theme_color: '#6B1A2C',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },

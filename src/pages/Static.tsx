@@ -1,44 +1,8 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { A11Y_CONTACT, APP_NAME, SIGNUP_ENDPOINT } from '../config'
+import { A11Y_CONTACT, APP_NAME } from '../config'
 import { Page } from '../components/Layout'
 import { Alert, Phone } from '../components/Icons'
 import vets from '../data/emergency-vets.json'
-
-export function Soon() {
-  const [state, setState] = useState<'idle' | 'sending' | 'ok' | 'error'>('idle')
-  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setState('sending')
-    try {
-      const res = await fetch(SIGNUP_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: new FormData(e.currentTarget).get('email') }) })
-      setState(res.ok ? 'ok' : 'error')
-    } catch { setState('error') }
-  }
-  return (
-    <Page title="כבר יש לי כלב">
-      <h1 className="pt-6 text-4xl font-extrabold">בקרוב</h1>
-      <p className="mt-3 max-w-xl text-lg text-ink-soft">החלק למי שכבר יש לו כלב עדיין בבנייה: תזכורות, הבית של הכלב ואלבום הגדילה. בינתיים אפשר לעבור על ספריית הכלבים.</p>
-      <section aria-labelledby="signup-h" className="card mt-6 max-w-xl p-5">
-        <h2 id="signup-h" className="text-xl">עדכנו אותי כשזה מוכן</h2>
-        {!SIGNUP_ENDPOINT ? (
-          <p className="m-0 mt-2 text-ink-soft">ההרשמה לעדכונים תיפתח בקרוב.</p>
-        ) : state === 'ok' ? (
-          <p role="status" className="m-0 mt-2 rounded-xl bg-good-bg p-3 font-semibold text-good-ink">נרשמתם. נעדכן אתכם במייל.</p>
-        ) : (
-          <form onSubmit={submit} className="mt-3 grid gap-3">
-            <label htmlFor="email" className="font-semibold">כתובת מייל</label>
-            <input id="email" name="email" type="email" required autoComplete="email" dir="ltr" className="field" />
-            <p className="m-0 text-sm text-ink-soft">נשתמש בכתובת רק כדי להודיע שהחלק הזה נפתח.</p>
-            <button className="btn btn-primary" disabled={state === 'sending'}>{state === 'sending' ? 'שולח' : 'הרשמה'}</button>
-            <p role="alert" className="m-0 min-h-6 font-semibold text-warn-ink">{state === 'error' ? 'ההרשמה לא הצליחה. נסו שוב בעוד רגע.' : ''}</p>
-          </form>
-        )}
-      </section>
-      <Link to="/library" className="btn btn-ghost mt-6">לספריית הכלבים</Link>
-    </Page>
-  )
-}
 
 /** High contrast, no animation, big dial buttons. */
 export function Emergency() {
@@ -105,7 +69,7 @@ export function NotFound() {
   return (
     <Page title="העמוד לא נמצא">
       <section className="card mt-10 p-6 text-center">
-        <h1 className="text-3xl">העמוד הזה ברח מהרצועה</h1>
+        <h1 className="text-4xl">העמוד הזה ברח מהרצועה</h1>
         <p className="text-ink-soft">לא מצאנו את העמוד שחיפשתם.</p>
         <Link to="/" className="btn btn-primary">לדף הבית</Link>
       </section>

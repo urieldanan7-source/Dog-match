@@ -9,8 +9,15 @@ const Results = lazy(() => import('./pages/Results'))
 const Library = lazy(() => import('./pages/Library'))
 const Breed = lazy(() => import('./pages/Breed'))
 const Compare = lazy(() => import('./pages/Compare'))
-const pick = (name: 'Soon' | 'Emergency' | 'Accessibility' | 'NotFound') => lazy(() => import('./pages/Static').then((m) => ({ default: m[name] })))
-const Soon = pick('Soon'), Emergency = pick('Emergency'), Accessibility = pick('Accessibility'), NotFound = pick('NotFound')
+const Owner = lazy(() => import('./pages/Owner'))
+const Store = lazy(() => import('./pages/Store'))
+const Insurance = lazy(() => import('./pages/Insurance'))
+const Toxic = lazy(() => import('./pages/Toxic'))
+const Health = lazy(() => import('./pages/Health'))
+const MyDogList = lazy(() => import('./pages/MyDog').then((m) => ({ default: m.MyDogList })))
+const MyDogProject = lazy(() => import('./pages/MyDog').then((m) => ({ default: m.MyDogProject })))
+const pick = (name: 'Emergency' | 'Accessibility' | 'NotFound') => lazy(() => import('./pages/Static').then((m) => ({ default: m[name] })))
+const Emergency = pick('Emergency'), Accessibility = pick('Accessibility'), NotFound = pick('NotFound')
 
 function Shell() {
   useTheme()
@@ -26,7 +33,14 @@ function Shell() {
           <Route path="/library" element={<Library />} />
           <Route path="/breed/:id" element={<Breed />} />
           <Route path="/compare" element={<Compare />} />
-          <Route path="/soon" element={<Soon />} />
+          <Route path="/owner" element={<Owner />} />
+          <Route path="/soon" element={<Owner />} />
+          <Route path="/my-dog" element={<MyDogList />} />
+          <Route path="/my-dog/:id" element={<MyDogProject />} />
+          <Route path="/store" element={<Store />} />
+          <Route path="/insurance" element={<Insurance />} />
+          <Route path="/toxic" element={<Toxic />} />
+          <Route path="/health" element={<Health />} />
           <Route path="/emergency" element={<Emergency />} />
           <Route path="/accessibility" element={<Accessibility />} />
           <Route path="*" element={<NotFound />} />

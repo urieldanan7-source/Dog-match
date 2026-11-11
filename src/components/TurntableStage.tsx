@@ -20,7 +20,9 @@ export function TurntableStage({ breedId, stop }: { breedId: string; stop: StopI
       const start = performance.now()
       const tick = (now: number) => {
         const k = Math.min(1, (now - start) / MOVE)
-        v.currentTime = from + (shot.t - from) * ease(k)
+        const t = from + (shot.t - from) * ease(k)
+        // Seek only when the frame would actually change (30fps video), so the decoder is not flooded.
+        if (Math.abs(v.currentTime - t) > 1 / 30 || k === 1) v.currentTime = t
         if (k < 1) raf = requestAnimationFrame(tick)
       }
       raf = requestAnimationFrame(tick)

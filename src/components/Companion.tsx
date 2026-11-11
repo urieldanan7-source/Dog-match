@@ -38,16 +38,16 @@ export function Companion({ wag = false }: { wag?: boolean }) {
           <motion.p
             id="companion-tip" role="status"
             initial={{ opacity: 0, y: 8, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8 }}
-            className="card m-0 mb-3 max-w-[15rem] px-4 py-3 text-[.9375rem] text-ink"
-            style={{ borderEndEndRadius: 6 }}
+            className="m-0 mb-3 max-w-[15rem] bg-ink px-4 py-3 text-[.9375rem] text-bg"
+            style={{ borderRadius: '14px 14px 14px 2px' }}
           >{tip}</motion.p>
         )}
       </AnimatePresence>
       <button
         type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} aria-controls="companion-tip"
         aria-label={`הכלב המלווה, ${names}${sleeping ? ', ישן' : ''}. הקישו לטיפ`}
-        className="relative grid h-16 w-16 shrink-0 cursor-pointer place-items-center rounded-full border-2 bg-surface p-0 shadow-lg"
-        style={{ borderColor: 'var(--accent)' }}
+        className="relative grid h-16 w-16 shrink-0 cursor-pointer place-items-center rounded-full border-2 bg-blush p-0"
+        style={{ borderColor: 'var(--color-ink)' }}
       >
         {dogs.slice(0, 2).map((d, i) => (
           <img

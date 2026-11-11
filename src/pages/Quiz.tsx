@@ -18,8 +18,13 @@ function Leash({ step, total, dog, walking }: { step: number; total: number; dog
           <path d="M100 5 Q 87.5 0 75 5 T 50 5 T 25 5 T 0 5" fill="none" stroke={stroke} strokeWidth="5" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
         </svg>
       ))}
-      <div className="absolute bottom-3 h-[76px] w-[76px]" style={{ insetInlineStart: `calc(${p} * (100% - 76px))`, transition: 'inset-inline-start .6s cubic-bezier(.22,1,.36,1)' }}>
+      {/* The track is the leash minus one dog. The wrapper spans it and slides by its own width, so only transform animates. */}
+      <div className="absolute bottom-3 start-0 h-[76px] w-[calc(100%-76px)]" aria-hidden="true">
+      <div className="h-full w-full will-change-transform" style={{ transform: `translateX(${-p * 100}%)`, transition: 'transform .6s cubic-bezier(.22,1,.36,1)' }}>
+      <div className="h-[76px] w-[76px]">
         <img aria-hidden="true" alt="" src={walking ? dogRun(dog) : dogImage(dog)} width={76} height={76} className="h-full w-full object-contain" style={{ transform: 'scaleX(-1)' }} />
+      </div>
+      </div>
       </div>
     </div>
   )
@@ -65,8 +70,9 @@ export default function Quiz({ refine = false }: { refine?: boolean }) {
 
   return (
     <Page title={refine ? 'שאלות לדיוק התוצאה' : 'השאלון'}>
-      <p className="m-0 pt-2 text-sm font-semibold text-ink-soft">
-        {refine ? 'שאלות לדיוק התוצאה' : 'יוצאים לטיול'} · שאלה {i + 1} מתוך {list.length}
+      <p className="m-0 flex items-baseline justify-between pt-8">
+        <span className="eyebrow">{refine ? 'שאלות לדיוק התוצאה' : 'יוצאים לטיול'}</span>
+        <span className="font-semibold text-ink-soft"><span className="numeral text-3xl text-ink">{String(i + 1).padStart(2, '0')}</span> / {list.length}</span>
       </p>
       <Leash step={i} total={list.length} dog={myDogs[0] ?? DEFAULT_DOG} walking={walking} />
 
@@ -77,19 +83,19 @@ export default function Quiz({ refine = false }: { refine?: boolean }) {
           transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
           className="mt-4"
         >
-          <h1 id="q-h" ref={heading} tabIndex={-1} className="text-[1.75rem] font-bold outline-none sm:text-4xl">{q.text}</h1>
+          <h1 id="q-h" ref={heading} tabIndex={-1} className="text-[2.25rem] font-bold leading-[1.05] outline-none sm:text-5xl">{q.text}</h1>
           {q.help && <p className="m-0 mt-2 text-ink-soft">{q.help}</p>}
-          <div role="group" aria-labelledby="q-h" className="mt-5 grid gap-3">
+          <div role="group" aria-labelledby="q-h" className="mt-7 grid border-t border-line">
             {q.options.map((opt) => {
               const on = q.multi ? multi.includes(opt.id) : value === opt.id
               return (
                 <button
                   key={opt.id} type="button" aria-pressed={on} onClick={() => choose(opt.id)}
-                  className="flex min-h-14 cursor-pointer items-center justify-between gap-3 rounded-2xl border-2 bg-surface px-5 text-start text-lg font-semibold text-ink transition-colors"
-                  style={{ borderColor: on ? 'var(--accent)' : 'var(--color-line)', background: on ? 'var(--color-accent-tint)' : undefined }}
+                  className="flex min-h-16 cursor-pointer items-center justify-between gap-3 border-0 border-b border-solid border-line bg-transparent px-1 text-start text-xl text-ink transition-colors hover:bg-blush"
+                  style={{ background: on ? 'var(--color-blush)' : undefined, boxShadow: on ? 'inset -4px 0 0 var(--accent)' : undefined, fontWeight: on ? 600 : 400, paddingInlineStart: on ? 16 : 4, transition: 'padding .2s, background-color .2s' }}
                 >
                   <span>{opt.label}</span>
-                  <span aria-hidden="true" className="grid h-7 w-7 shrink-0 place-items-center rounded-full border-2" style={{ borderColor: on ? 'var(--accent)' : 'var(--color-ink-soft)', background: on ? 'var(--accent)' : 'transparent', color: 'var(--color-surface)' }}>
+                  <span aria-hidden="true" className="grid h-6 w-6 shrink-0 place-items-center border-[1.5px]" style={{ borderRadius: q.multi ? 2 : 999, borderColor: on ? 'var(--accent)' : 'var(--color-ink-soft)', background: on ? 'var(--accent)' : 'transparent', color: '#fff' }}>
                     {on && <Check width={16} height={16} strokeWidth={3} />}
                   </span>
                 </button>

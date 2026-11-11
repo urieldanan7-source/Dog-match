@@ -4,7 +4,7 @@ export interface BreedTheme { stage: string; glow: string; accent: string; ui: s
 const t = (stage: string, glow: string, accent: string, ui: string, uiStrong: string): BreedTheme =>
   ({ stage, glow, accent, ui, uiStrong })
 
-export const defaultTheme = t('#0E0F12', '#2A2D33', '#0E7C74', '#0E7C74', '#0A5C56')
+export const defaultTheme = t('#110B0D', '#3A1B24', '#E7A9A0', '#6B1A2C', '#4C0F1E')
 const fluffy = t('#0C0A0B', '#8E7F86', '#F1E3EA', '#75586A', '#5A4251')
 const flat = t('#0B0908', '#7D6650', '#E8C9A4', '#735534', '#574027')
 const hound = t('#0D0805', '#9A5426', '#F09A5B', '#964A14', '#74380E')

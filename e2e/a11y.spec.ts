@@ -7,11 +7,12 @@ const answers = {
   garden: 'none', neighbors: 'yes', time: '1-2', aloneHours: '4-8', sport: 'walks', travel: 'rare',
   budget: '300-600', experience: 'none', priorities: ['kids', 'trainable'], climate: 'center', hair: 'some',
 }
-const screens = ['/', '/quiz', '/quiz/refine', '/results', '/library', '/breed/border-collie', '/breed/shih-tzu', '/compare?a=labrador&b=pug', '/soon', '/emergency', '/accessibility', '/nope']
+const screens = ['/', '/quiz', '/quiz/refine', '/results', '/library', '/breed/border-collie', '/breed/shih-tzu', '/compare?a=labrador&b=pug', '/owner', '/my-dog', '/my-dog/abc', '/store', '/insurance', '/toxic', '/health', '/emergency', '/accessibility', '/nope']
 
 test.beforeEach(async ({ context }) => {
   await context.addInitScript((a) => {
     localStorage.setItem('dogmatch.answers.v1', JSON.stringify(a))
+    localStorage.setItem('dogmatch.projects.v1', JSON.stringify([{ id: 'abc', name: 'לולה', breedId: 'golden', birth: '2026-08-20', created: '2026-11-01', done: {}, duties: [], bag: { kg: 12, opened: '2026-10-20' } }]))
     sessionStorage.setItem('dogmatch.splash', '1')
   }, answers)
 })

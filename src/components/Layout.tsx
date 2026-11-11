@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { APP_NAME } from '../config'
-import { themeFor } from '../lib/breedTheme'
 import { actions, useStore } from '../lib/store'
 import { Close, Menu, Moon, Paw, Sun } from './Icons'
 import { Companion } from './Companion'
 
-const NAV: [string, string][] = [['/', 'בית'], ['/quiz', 'השאלון'], ['/library', 'ספריית הכלבים'], ['/emergency', 'חירום'], ['/accessibility', 'הצהרת נגישות']]
-const SOON = ['החנות', 'הבוט', 'הבית של הכלב', 'אלבום הגדילה']
+const NAV: [string, string][] = [['/quiz', 'השאלון'], ['/library', 'ספריית הכלבים'], ['/my-dog', 'הכלב שלי'], ['/store', 'חנות וקופונים'], ['/insurance', 'ביטוח בריאות']]
+const MORE: [string, string][] = [['/', 'בית'], ['/health', 'שאלות בריאות'], ['/toxic', 'מה אסור לכלב לאכול'], ['/compare', 'השוואה בין זנים'], ['/emergency', 'חירום'], ['/accessibility', 'הצהרת נגישות']]
+const SOON = ['הבוט זנבי', 'אלבום הגדילה']
 
 /** Applies the theme to <html>: night mode, and the accent of the dog the user chose. */
 export function useTheme() {
@@ -15,9 +15,9 @@ export function useTheme() {
   useEffect(() => {
     const root = document.documentElement
     root.dataset.theme = night ? 'night' : 'light'
-    const t = themeFor(myDogs[0])
-    root.style.setProperty('--accent', night ? (myDogs[0] ? t.accent : '#5CC9BF') : t.ui)
-    root.style.setProperty('--accent-strong', night ? '#FFFFFF' : t.uiStrong)
+    // The brand burgundy stays on light screens. Night mode uses blush.
+    root.style.setProperty('--accent', night ? '#E7A9A0' : '#6B1A2C')
+    root.style.setProperty('--accent-strong', night ? '#F2D7D2' : '#4C0F1E')
   }, [myDogs, night])
 }
 
@@ -57,8 +57,8 @@ function MenuSheet({ onClose }: { onClose: () => void }) {
       </div>
       <nav aria-label="ראשי" className="mt-4">
         <ul className="m-0 list-none p-0">
-          {NAV.map(([to, label]) => (
-            <li key={to}><Link to={to} onClick={() => ref.current?.close()} className="flex min-h-12 items-center border-b border-line text-lg font-semibold text-ink no-underline">{label}</Link></li>
+          {[...NAV, ...MORE].map(([to, label]) => (
+            <li key={to}><Link to={to} onClick={() => ref.current?.close()} className="flex min-h-12 items-center border-b border-line font-display text-xl font-bold text-ink no-underline">{label}</Link></li>
           ))}
         </ul>
       </nav>
@@ -75,19 +75,49 @@ function MenuSheet({ onClose }: { onClose: () => void }) {
 
 export function Header({ onDark = false }: { onDark?: boolean }) {
   const [open, setOpen] = useState(false)
-  const tone = onDark ? 'text-[#F3F1EC]' : 'text-ink'
+  const { pathname } = useLocation()
+  const tone = onDark ? 'text-[#F6E4E2]' : 'text-ink'
   return (
-    <header className={`relative z-30 flex items-center justify-between px-4 py-3 ${tone}`}>
-      <Link to="/" className={`flex min-h-11 items-center gap-2 font-display text-lg font-bold no-underline ${tone}`}>
-        <Paw style={{ color: onDark ? 'var(--stage-accent)' : 'var(--accent)' }} />{APP_NAME}
-      </Link>
-      <button type="button" onClick={() => setOpen(true)} aria-label="פתיחת התפריט" aria-haspopup="dialog" className={`grid h-11 w-11 cursor-pointer place-items-center rounded-full border-0 bg-transparent ${tone}`}><Menu /></button>
+    <header className={`relative z-30 ${onDark ? '' : 'border-b border-line bg-bg'}`}>
+      <div className={`mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-3 sm:px-6 ${tone}`}>
+        <Link to="/" className={`flex min-h-11 items-center gap-2 font-display text-[1.375rem] font-bold no-underline ${tone}`}>
+          <Paw width={20} height={20} style={{ color: onDark ? 'var(--stage-accent)' : 'var(--accent)' }} />{APP_NAME}
+        </Link>
+        {!onDark && (
+          <nav aria-label="ראשי" className="hidden lg:block">
+            <ul className="m-0 flex list-none gap-1 p-0">
+              {NAV.map(([to, label]) => {
+                const on = pathname === to || (to !== '/' && pathname.startsWith(to))
+                return <li key={to}><Link to={to} aria-current={on ? 'page' : undefined} className="flex min-h-11 items-center px-3 text-[.9375rem] font-semibold text-ink no-underline" style={on ? { boxShadow: 'inset 0 -2px 0 var(--accent)' } : undefined}>{label}</Link></li>
+              })}
+            </ul>
+          </nav>
+        )}
+        <button type="button" onClick={() => setOpen(true)} aria-label="פתיחת התפריט" aria-haspopup="dialog" className={`grid h-11 w-11 cursor-pointer place-items-center border-0 bg-transparent ${onDark ? '' : 'lg:hidden'} ${tone}`}><Menu /></button>
+      </div>
       {open && <MenuSheet onClose={() => setOpen(false)} />}
     </header>
   )
 }
 
-export function Page({ children, title, companion = true, wag = false }: { children: ReactNode; title: string; companion?: boolean; wag?: boolean }) {
+function Footer() {
+  return (
+    <footer className="bg-[#160F11] text-[#F6E4E2]">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-[1.4fr_1fr_1fr] sm:px-6">
+        <div>
+          <p className="m-0 font-display text-2xl font-bold">{APP_NAME}</p>
+          <p className="m-0 mt-2 max-w-xs text-[#C9A2A6]">התאמה כנה בין אנשים לכלבים, עם הטוב והרע של כל אחד.</p>
+        </div>
+        <nav aria-label="קישורים בתחתית">
+          <ul className="m-0 grid list-none gap-1 p-0">{NAV.map(([to, l]) => <li key={to}><Link to={to} className="inline-flex min-h-11 items-center text-[#F6E4E2] no-underline hover:underline">{l}</Link></li>)}</ul>
+        </nav>
+        <ul className="m-0 grid list-none content-start gap-1 p-0">{MORE.slice(1).map(([to, l]) => <li key={to}><Link to={to} className="inline-flex min-h-11 items-center text-[#F6E4E2] no-underline hover:underline">{l}</Link></li>)}</ul>
+      </div>
+    </footer>
+  )
+}
+
+export function Page({ children, title, companion = true, wag = false, wide = false }: { children: ReactNode; title: string; companion?: boolean; wag?: boolean; wide?: boolean }) {
   const { pathname } = useLocation()
   useEffect(() => { document.title = `${title} | ${APP_NAME}` }, [title])
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
@@ -95,10 +125,8 @@ export function Page({ children, title, companion = true, wag = false }: { child
     <div className="flex min-h-dvh flex-col bg-bg text-ink">
       <a href="#main" className="skip-link">דילוג לתוכן</a>
       <Header />
-      <main id="main" tabIndex={-1} className="mx-auto w-full max-w-3xl flex-1 px-4 pb-28 outline-none">{children}</main>
-      <footer className="border-t border-line px-4 py-5 text-center text-sm text-ink-soft">
-        <Link to="/accessibility">הצהרת נגישות</Link><span aria-hidden="true"> · </span><Link to="/emergency">חירום</Link>
-      </footer>
+      <main id="main" tabIndex={-1} className={`mx-auto w-full flex-1 px-4 pb-24 outline-none sm:px-6 ${wide ? 'max-w-6xl' : 'max-w-3xl'}`}>{children}</main>
+      <Footer />
       {companion && <Companion wag={wag} />}
     </div>
   )

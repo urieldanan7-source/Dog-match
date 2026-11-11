@@ -5,7 +5,7 @@ import { Page } from '../components/Layout'
 import { Back, Forward } from '../components/Icons'
 import { useIris } from '../components/Iris'
 import { themeFor } from '../lib/breedTheme'
-import { dogImage } from '../lib/dogAssets'
+import { Arch } from '../components/ui'
 import { coreQuestions, profileFromAnswers } from '../lib/quiz'
 import { breeds, scoreBreed } from '../lib/scoring'
 import { useStore } from '../lib/store'
@@ -51,23 +51,23 @@ export default function Library() {
   }
 
   const mobile = w < 640
-  const size = mobile ? 250 : 340
-  const gap = mobile ? 170 : 260
+  const size = mobile ? 230 : 300
+  const gap = mobile ? 190 : 270
   const span = mobile ? 2 : 3
 
   return (
-    <Page title="ספריית הכלבים">
-      <h1 className="pt-2 text-3xl font-extrabold sm:text-4xl">ספריית הכלבים</h1>
-      <p className="m-0 mt-1 text-ink-soft">עברו בין הכלבים והקישו על כלב כדי להיכנס.</p>
+    <Page title="ספריית הכלבים" wide>
+      <span className="eyebrow mt-10">ספריית הכלבים</span>
+      <h1 className="mt-2 text-[2.75rem] font-black leading-none sm:text-6xl">21 כלבים, מקרוב</h1>
+      <p className="m-0 mt-3 text-lg text-ink-soft">עברו בין הכלבים בחיצים או בהחלקה, והקישו על כלב כדי להיכנס.</p>
 
       <section
         aria-roledescription="קרוסלה" aria-label="כל הכלבים" onKeyDown={onKey} onWheel={onWheel}
-        className="relative mt-4 overflow-hidden rounded-[28px]"
-        style={{ marginInline: 'calc(50% - 50vw + 8px)', background: 'radial-gradient(ellipse 70% 60% at 50% 88%, #FFFFFF 0%, #F3F5F7 55%, #DDE2E7 100%)' }}
+        className="relative mt-8 overflow-hidden rounded-[6px]"
+        style={{ background: 'var(--color-blush)' }}
       >
-        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-2/3" style={{ background: 'radial-gradient(ellipse 34% 100% at 50% 0%, rgb(255 255 255 / .95), transparent 70%)' }} />
         <motion.div
-          className="relative touch-pan-y" style={{ height: size + 60 }}
+          className="relative touch-pan-y" style={{ height: size * 1.25 + 40 }}
           drag="x" dragConstraints={{ left: 0, right: 0 }} dragElastic={0.18} dragSnapToOrigin
           onDragEnd={(_, info) => { if (Math.abs(info.offset.x) > 50) move(info.offset.x > 0 ? 1 : -1) }}
         >
@@ -77,43 +77,38 @@ export default function Library() {
             if (off < -n / 2) off += n
             if (Math.abs(off) > span) return null
             const center = off === 0
-            const theme = themeFor(b.id)
             return (
               <motion.div
                 key={b.id} aria-hidden={!center} className="absolute top-0"
-                style={{ left: '50%', width: size, height: size, marginLeft: -size / 2, zIndex: 10 - Math.abs(off) }}
+                style={{ left: '50%', width: size, height: size * 1.25, marginLeft: -size / 2, zIndex: 10 - Math.abs(off) }}
                 initial={false}
-                animate={{ x: -off * gap, y: 26 + Math.abs(off) * Math.abs(off) * -9, scale: center ? 1.15 : 0.8, rotate: center ? 0 : off * -4 + (idx % 3 - 1) * 3, opacity: center ? 1 : 0.75 }}
+                animate={{ x: -off * gap, y: center ? 24 : 60, scale: center ? 1 : 0.74, opacity: center ? 1 : Math.abs(off) > 1 ? 0.35 : 0.6 }}
                 transition={{ duration: 0.6, ease: EASE }}
               >
-                <img
-                  src={dogImage(b.id)} alt="" width={size} height={size} draggable={false}
-                  className={`h-full w-full object-contain ${center ? 'bob' : ''}`}
-                  style={{ filter: center ? 'drop-shadow(0 22px 18px rgb(15 42 51 / .22))' : `saturate(.4) drop-shadow(0 0 5px ${theme.accent}) ${Math.abs(off) > 1 ? 'blur(1.5px)' : ''}`, transition: 'filter .6s' }}
-                />
+                <Arch id={b.id} eager={Math.abs(off) <= 1} className="h-full w-full" />
               </motion.div>
             )
           })}
-          <button type="button" onClick={enter} aria-label={`כניסה לעמוד של ${breed.name}`} className="absolute cursor-pointer rounded-full border-0 bg-transparent" style={{ left: '50%', top: 20, width: size * 0.9, height: size, marginLeft: -size * 0.45, zIndex: 20 }} />
-          <button type="button" onClick={() => move(-1)} aria-label="הכלב הקודם" className="absolute top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-[#C6CED6] bg-white/80 text-[#0F2A33]" style={{ right: 10 }}><Back /></button>
-          <button type="button" onClick={() => move(1)} aria-label="הכלב הבא" className="absolute top-1/2 z-30 grid h-11 w-11 -translate-y-1/2 cursor-pointer place-items-center rounded-full border border-[#C6CED6] bg-white/80 text-[#0F2A33]" style={{ left: 10 }}><Forward /></button>
+          <button type="button" onClick={enter} aria-label={`כניסה לעמוד של ${breed.name}`} className="absolute cursor-pointer rounded-full border-0 bg-transparent" style={{ left: '50%', top: 24, width: size, height: size * 1.25, marginLeft: -size / 2, zIndex: 20 }} />
+          <button type="button" onClick={() => move(-1)} aria-label="הכלב הקודם" className="absolute top-1/2 z-30 grid h-12 w-12 -translate-y-1/2 cursor-pointer place-items-center rounded-full border-0 bg-ink text-bg" style={{ right: 12 }}><Back /></button>
+          <button type="button" onClick={() => move(1)} aria-label="הכלב הבא" className="absolute top-1/2 z-30 grid h-12 w-12 -translate-y-1/2 cursor-pointer place-items-center rounded-full border-0 bg-ink text-bg" style={{ left: 12 }}><Forward /></button>
         </motion.div>
 
-        <div className="relative px-4 pb-6 text-center text-[#0F2A33]" aria-live="polite">
-          <motion.h2 key={breed.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE }} className="display text-[2.75rem] sm:text-6xl">{breed.name}</motion.h2>
+        <div className="relative px-4 pb-8 pt-2 text-center text-ink" aria-live="polite">
+          <motion.h2 key={breed.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE }} className="display text-[3rem] sm:text-7xl">{breed.name}</motion.h2>
           <p className="m-0 mt-2 min-h-8">
-            {percent !== null && <span className="inline-block rounded-full px-3 py-1 text-sm font-bold text-white" style={{ background: themeFor(breed.id).uiStrong }}>{percent}% התאמה אליכם</span>}
+            {percent !== null && <span className="inline-block bg-ink px-3 py-1 text-sm font-semibold text-bg">{percent}% התאמה אליכם</span>}
           </p>
-          <button type="button" className="btn mt-3 bg-[#0F2A33] text-white" onClick={enter}>להיכנס<Forward /></button>
-          <p className="m-0 mt-3 text-sm text-[#45606A]">{i + 1} מתוך {n}</p>
+          <button type="button" className="btn btn-primary mt-3" onClick={enter}>להיכנס<Forward /></button>
+          <p className="m-0 mt-3 text-sm text-ink-soft">{i + 1} מתוך {n}</p>
         </div>
       </section>
 
-      <section aria-labelledby="all-h" className="mt-8">
-        <h2 id="all-h" className="text-xl">כל הכלבים ברשימה</h2>
-        <ul className="m-0 mt-3 grid list-none grid-cols-2 gap-2 p-0 sm:grid-cols-3">
+      <section aria-labelledby="all-h" className="mt-14">
+        <h2 id="all-h" className="text-3xl">כל הכלבים ברשימה</h2>
+        <ul className="m-0 mt-5 grid list-none grid-cols-2 gap-x-6 p-0 sm:grid-cols-3 lg:grid-cols-4">
           {breeds.map((b) => (
-            <li key={b.id}><Link to={`/breed/${b.id}`} className="flex min-h-12 items-center rounded-xl border border-line bg-surface px-3 font-semibold text-ink no-underline">{b.name}</Link></li>
+            <li key={b.id}><Link to={`/breed/${b.id}`} className="flex min-h-12 items-center border-b border-line font-display text-lg font-bold text-ink no-underline hover:text-[var(--accent)]">{b.name}</Link></li>
           ))}
         </ul>
       </section>

@@ -9,7 +9,7 @@ export default function Compare() {
   const a = breedById(params.get('a') ?? '') ?? breeds[5]
   const b = breedById(params.get('b') ?? '') ?? breeds.find((x) => x.id !== a.id)!
   const pick = (key: 'a' | 'b', id: string) => setParams({ a: a.id, b: b.id, [key]: id }, { replace: true })
-  const colors = ['var(--accent)', 'var(--color-coral)']
+  const colors = ['var(--color-ink)', 'var(--accent)']
   return (
     <Page title="השוואה בין זנים">
       <h1 className="pt-4 text-3xl font-extrabold sm:text-4xl">השוואה בין זנים</h1>
@@ -35,7 +35,7 @@ export default function Compare() {
               {[a, b].map((br, n) => (
                 <td key={n} className="w-[38%] p-2">
                   <div className="font-semibold">{pct(br.scores[t.id])}%</div>
-                  <div aria-hidden="true" className="my-1 h-2 rounded-full bg-line"><div className="h-2 rounded-full" style={{ width: `${pct(br.scores[t.id])}%`, background: colors[n] }} /></div>
+                  <div aria-hidden="true" className="my-1 h-1 bg-line"><div className="h-1" style={{ width: `${pct(br.scores[t.id])}%`, background: colors[n] }} /></div>
                   <div className="text-sm text-ink-soft">{levelText(t.id, br.scores[t.id])}{br.source[t.id] === 'estimate' ? ' (הערכה)' : ''}</div>
                 </td>
               ))}
