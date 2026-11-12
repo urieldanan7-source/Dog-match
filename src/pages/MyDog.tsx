@@ -7,7 +7,7 @@ import { duties } from '../data/care'
 import { upcoming } from '../lib/reminders'
 import { Album, CalendarButton, Senior } from '../components/ProjectExtras'
 import { daysBetween, formatDate, projects, today, useProjects } from '../lib/projects'
-import { breedById, breeds } from '../lib/scoring'
+import { allBreeds as breeds, breedById } from '../lib/scoring'
 import { useStore } from '../lib/store'
 import { levelText } from '../lib/traitCopy'
 

@@ -21,9 +21,15 @@ export interface Breed {
 }
 
 export const traits = data.traits as Trait[]
-export const breeds = data.breeds as unknown as Breed[]
+export const allBreeds = data.breeds as unknown as Breed[]
+/**
+ * Real breeds only. "Mixed" is not a breed: every mixed dog is different, so the quiz, the library
+ * and the comparison leave it out. The mixed entries stay in the data for owners of a mixed dog
+ * (food and care estimates by size in "my dog").
+ */
+export const breeds = allBreeds.filter((b) => !b.id.startsWith('mixed-'))
 export const traitById = Object.fromEntries(traits.map((t) => [t.id, t])) as Record<TraitId, Trait>
-export const breedById = (id: string) => breeds.find((b) => b.id === id)
+export const breedById = (id: string) => allBreeds.find((b) => b.id === id)
 
 export type Needs = Record<TraitId, number>
 
@@ -112,18 +118,6 @@ export function rankBreeds(needs: Needs, opts: MatchOptions = {}, list: Breed[] 
       Number(a.overBudget) - Number(b.overBudget) || b.percent - a.percent ||
       (a.breed.name < b.breed.name ? -1 : a.breed.name > b.breed.name ? 1 : 0),
     )
-  // The mixed-breed groups fit almost everyone a little, so without this they fill the top every time.
-  // Keep the best one in the top three and move the others just below it.
-  const isMixed = (m: Match) => m.breed.id.startsWith('mixed-')
-  const head: Match[] = []
-  const held: Match[] = []
-  for (const m of sorted) {
-    if (head.length < 3 && isMixed(m) && head.some(isMixed)) held.push(m)
-    else head.push(m)
-    if (head.length === 3) break
-  }
-  const rest = sorted.filter((m) => !head.includes(m) && !held.includes(m))
-  sorted.splice(0, sorted.length, ...head, ...held, ...rest)
   const best = sorted.find((m) => !m.overBudget) ?? sorted[0]
   return { matches: sorted, notYet: !best || best.percent < NOT_YET_THRESHOLD }
 }

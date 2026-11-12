@@ -820,7 +820,7 @@
   },
   {
    "id": "mixed-small",
-   "name": "מעורב קטן ורגוע",
+   "name": "כלב מעורב קטן (עד 10 ק\"ג)",
    "scores": {
     "shedding": 2,
     "energy": 2,
@@ -862,7 +862,7 @@
   },
   {
    "id": "mixed-medium",
-   "name": "מעורב בינוני ופעיל",
+   "name": "כלב מעורב בינוני (10 עד 25 ק\"ג)",
    "scores": {
     "shedding": 3,
     "energy": 4,
@@ -904,7 +904,7 @@
   },
   {
    "id": "mixed-large",
-   "name": "מעורב גדול ורגוע",
+   "name": "כלב מעורב גדול (מעל 25 ק\"ג)",
    "scores": {
     "shedding": 3,
     "energy": 2,

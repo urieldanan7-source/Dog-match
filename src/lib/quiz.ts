@@ -160,6 +160,21 @@ export function sizeNote(a: Answers, matches: Match[]): string | undefined {
     ' אם תשנו את התשובות בנושאים האלה, הוא יעלה ברשימה.'
 }
 
+/**
+ * Most dogs in shelters are mixed, and each one is different, so we cannot score "mixed" as a breed.
+ * Instead, tell the user what to look for, taken from what their top breeds have in common.
+ */
+export function mixedNote(top: Match[]): string | undefined {
+  const lead = top.slice(0, 3)
+  if (!lead.length) return undefined
+  const avg = (t: TraitId) => lead.reduce((s, m) => s + m.breed.scores[t], 0) / lead.length
+  const size = avg('size'), energy = avg('energy')
+  const sizeWord = size <= 2 ? 'קטן' : size < 3.5 ? 'בינוני' : 'גדול'
+  const energyWord = energy <= 3 ? 'רגוע' : energy < 4.5 ? 'פעיל במידה' : 'מאוד פעיל'
+  return `בעמותות רוב הכלבים מעורבים, וכל אחד מהם שונה. לכן אנחנו לא מדרגים "מעורב" כמו זן. ` +
+    `לפי התשובות שלכם, חפשו כלב ${sizeWord} ו${energyWord}, וספרו לעמותה מה חשוב לכם. הם מכירים את האופי של כל כלב.`
+}
+
 const KEY = 'dogmatch.answers.v1'
 export function loadAnswers(): Answers {
   try { return JSON.parse(localStorage.getItem(KEY) ?? '{}') as Answers } catch { return {} }

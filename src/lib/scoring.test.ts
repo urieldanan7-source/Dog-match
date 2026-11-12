@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { profileFromAnswers, sizeNote, type Answers } from './quiz'
+import { mixedNote, profileFromAnswers, sizeNote, type Answers } from './quiz'
 import { distance, rankBreeds, scoreBreed, breedById } from './scoring'
 
 /**
@@ -93,8 +93,12 @@ describe('results follow the answers', () => {
     expect(a.filter((id) => b.includes(id))).toEqual([])
   })
 
-  it('shows at most one mixed-breed group in the top three', () => {
-    expect(run(example).slice(0, 3).filter((m) => m.breed.id.startsWith('mixed-')).length).toBeLessThanOrEqual(1)
+  it('never ranks "mixed" as if it were a breed', () => {
+    expect(run(example).some((m) => m.breed.id.startsWith('mixed-'))).toBe(false)
+  })
+
+  it('tells shelter adopters what kind of mixed dog to look for', () => {
+    expect(mixedNote(run({ ...base, sizePref: 'large', time: '3+', sport: 'run' }))).toMatch(/חפשו כלב גדול/)
   })
 
   it('explains when the size asked for is not on top', () => {
