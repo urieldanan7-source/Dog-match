@@ -1,229 +1,202 @@
-# פרומפט ל־Claude Code: סלייד שואו של הכלבים עם Higgsfield
+# פרומפט ל־Claude Code: שורת הכלבים עם ספוט לייט (Higgsfield)
 
-> **איך משתמשים:** פותחים Claude Code בתיקייה `D:\IndieVerse\dog-match`, ומדביקים את כל מה שמתחת לקו.
-> Higgsfield כבר מחובר ל־Claude Code. הפרומפט מסביר לו בדיוק מה לייצר, איך, ואיך להכניס את זה לאתר.
+> **איך משתמשים:** פותחים Claude Code בתיקייה `D:\IndieVerse\dog-match`, מריצים `git pull`, ומדביקים את כל מה שמתחת לקו.
 
 ---
 
-## המשימה
+## מה uriel רוצה (קרא פעמיים)
 
-אתה עובד על האתר "איזה כלב מתאים לי" (Vite + React + TypeScript + Tailwind v4, RTL, עברית). התיקייה היא `D:\IndieVerse\dog-match`. **לפני הכל:** `git pull`.
+**כל הכלבים עומדים בשורה אחת, אחד ליד השני, על במה חשוכה. מעל כל כלב יש ספוט לייט משלו.** כשעוברים לכלב הבא (בחץ, בהחלקה או בגלגלת), הספוט של הכלב הקודם כבה, והספוט של הכלב הבא נדלק. הכלב שעליו עומדים מואר במלואו. כל השאר נשארים בחושך, ורואים מהם רק קו אור דק סביב הפרווה.
 
-המטרה היא להחליף את כלבי הצעצוע בתלת־ממד בכלבים שנראים אמיתיים, בסגנון סרטון הדוגמה ששלח uriel. פריימים ממנו נמצאים ב־`docs/reference/`. מדובר בהקלטה של אתר מוצרים בתלת־ממד: פחיות שמרחפות בקרוסלה, ובלחיצה על אחת המסך הופך לכהה וקולנועי. המוצר מסתובב, המצלמה מתקרבת לחלקים שונים בגוף בזמן הגלילה, ובסוף מופיעה טיפוגרפיה ענקית ומטושטשת מאחוריו.
+זה בדיוק כמו בסצנה הראשונה של סרטון הדוגמה: הפחיות עומדות בשורה, ורק האמצעית מוארת. הפריימים נמצאים ב־`docs/reference/showcase-frame-01.jpg` וב־`showcase-contact-sheet.jpg`. **תסתכל עליהם לפני שמתחילים.**
 
-את המדיה מייצרים עם **Higgsfield** (כלי ה־MCP שמתחילים ב־`mcp__Higgsfield__`), ומכניסים אותה לאתר דרך המנגנון שכבר קיים.
+**זה לא סרטון סיבוב של כלב אחד, ולא דף של זן.** זו התצוגה של כל הכלבים יחד. היא מחליפה את הקרוסלה שבדף "ספריית הכלבים" (`src/pages/Library.tsx`), ואפשר להשתמש בה גם בדף הבית.
 
-**קרא קודם את הקבצים האלה:**
-
-- **`docs/DOG_LIBRARY_SPEC.md`:** המפרט המלא של הספרייה (4 סצנות, תזמונים, צבעים לכל זן). התסריט של הסרטון מפורט שם שנייה אחרי שנייה.
-- **`docs/reference/showcase-contact-sheet.jpg`** וששת הפריימים: איך נראה סרטון הדוגמה. **תסתכל עליהם.**
-- **`src/lib/dogAssets.ts`:**
-  - כל הנכסים של הכלבים עוברים דרכו.
-  - יש בו `turntables`, סרטוני סיבוב שהאתר מריץ קדימה ואחורה לפי הגלילה.
-  - כרגע יש סרטוני סיבוב לשלושה זנים: בורדר קולי, גולדן וכנעני.
-- **`src/components/TurntableStage.tsx`:** הבמה שמריצה את הסרטון קדימה ואחורה לפי `currentTime`, ועושה זום לנקודה בכל עצירה.
-- **`src/pages/Library.tsx` ו־`src/pages/Breed.tsx`:** הקרוסלה ודף הזן.
-- **`src/data/breeds.json`:** 21 זנים. מכאן לוקחים את שמות הזנים ואת הסדר.
+**מה מייצרים:**
+1. **באתר, וזה העיקר:** שורה אינטראקטיבית. התמונות של הכלבים מגיעות מ־Higgsfield, והאור והמעבר בין הכלבים נבנים בקוד.
+2. **סרטון לרשתות, רק אחרי שהאתר מוכן ובאישור:** המצלמה עוברת לאורך השורה, והספוטים נדלקים אחד אחד.
 
 ## כללים שאסור לשבור
 
-1. **לא קונים כלום ולא מוציאים קרדיטים בלי אישור של uriel.**
-   - לפני כל ייצור, בודקים יתרה עם `balance` ומחיר משוער עם quote, או לפי מה ש־`models_explore` מחזיר.
-   - מציגים לו בעברית: כמה פריטים, איזה מודל, וכמה קרדיטים בערך.
+1. **לא מוציאים קרדיטים בלי אישור של uriel.**
+   - לפני כל ייצור: `balance` והערכת מחיר.
+   - מציגים לו בעברית: כמה תמונות, איזה מודל, וכמה קרדיטים בערך.
    - מחכים ל"כן".
-2. **מתחילים מפיילוט של זן אחד בלבד, בורדר קולי.** מייצרים את כל הסט שלו, מכניסים לאתר ומראים ל־uriel. רק אחרי שהוא מאשר, ממשיכים לשאר הזנים.
-3. **לא מעתיקים את הרפרנס:** לא את הלוגו, לא את שמות המוצרים, לא את הסלוגן ולא את הפונט. לוקחים רק את שפת התנועה, התאורה והקומפוזיציה.
-4. **אין טקסט, לוגו או סימן מים בתוך הסרטונים והתמונות.** את הטקסט מוסיף האתר.
-5. **הכלב צריך להיות נכון לזן:** מבנה גוף, אוזניים, זנב, אורך וצבע הפרווה. בלי קולר, בלי בגדים ובלי אביזרים.
-6. **לא משנים את נוסחת ההתאמה, ולא ממציאים מידע על זנים.**
-7. **כל הטקסט באתר בעברית.**
+2. **פיילוט קודם:** 3 זנים בלבד (בורדר קולי, לברדור, פאג), שורה עובדת באתר וצילום מסך ל־uriel. רק אחרי אישור ממשיכים לכל 21 הזנים.
+3. **כל הכלבים בדיוק באותה זווית, באותו גובה מצלמה ובאותה תאורה.** אחרת השורה תיראה כמו קולאז' ולא כמו במה אחת. זה הדבר הכי חשוב.
+4. **הגדלים אמיתיים:** צ'יוואווה קטן, ורועה גרמני גדול. כל הכלבים עומדים על אותו קו רצפה.
+5. **בלי טקסט, לוגו, קולר או אביזרים בתמונות.** כל כלב צריך להיות נכון לזן.
+6. **לא מעתיקים את המותג מהרפרנס,** רק את התאורה והקומפוזיציה.
+7. **לא משנים את נוסחת ההתאמה ולא ממציאים מידע.** כל הטקסט באתר בעברית.
 
-## שלב 0: היכרות עם Higgsfield (חובה, לפני כל ייצור)
+## שלב 0: היכרות עם Higgsfield
 
-1. **`get_workflow_instructions`** בלי ארגומנט, כדי לקבל את ההנחיות לסרטונים מרובי שלבים.
-2. **`models_explore`** עם `action: "recommend"`, פעמיים:
-   - פעם ל"תמונת סטודיו פוטוריאליסטית של כלב".
-   - פעם ל"image-to-video, מצלמה שמקיפה את הנושא 360°, הנושא נשאר במקום".
+1. **`get_workflow_instructions`** בלי ארגומנט.
+2. **`models_explore`** עם `action: "recommend"`: מודל לתמונות סטודיו פוטוריאליסטיות של כלבים, שתומך ב־**image reference** (כדי לשמור על אותה זווית ואותה תאורה בכל הזנים) וב־**edit** (כדי להחשיך תמונה קיימת בלי לשנות את הכלב).
+3. **`get_preset_instructions`** עם `{ preset: "/3d-jutsu" }`, ובדיקה של `scene_builder_3d_*`. זה לשלב הסרטון. כרגע רק בודקים מה אפשר.
+4. **`balance`.**
 
-   בחר מודל שתומך ב־**start frame** (ואם אפשר, גם ב־end frame), ב־**camera orbit** וב־**1080p**.
-3. **`get_presets`** עם `category: "motion"`: חפש תנועות מצלמה מוכנות מסוג orbit, turntable, dolly in ו־push in. **פתיחת הקטלוג לא מאשרת ייצור.**
-4. **`manage_reference_elements` או `show_reference_elements`:** אם יש אפשרות לשמור את הכלב כ"אלמנט" או "דמות" שחוזרת, השתמש בה. ככה אותו כלב בדיוק יופיע בכל הקליפים של הזן.
-5. **`balance`:** כמה קרדיטים יש.
+סכם ל־uriel בהודעה אחת: איזה מודל, כמה עולה הפיילוט (3 זנים), וכמה יעלו 21 זנים. **חכה לאישור.**
 
-סכם ל־uriel בהודעה אחת קצרה: איזה מודל בחרת לתמונה ולווידאו, ולמה, כמה עולה הפיילוט, וכמה יעלו כל 21 הזנים. **חכה לאישור.**
+## חלק 1: תמונות הכלבים מ־Higgsfield
 
-## מה מייצרים לכל זן (5 נכסים)
+### 1א. תמונת "מאסטר" לפי זווית ותאורה
 
-| # | נכס | יחס | אורך | משמש ב־ |
-| --- | --- | --- | --- | --- |
-| A | **תמונת גיבור:** הכלב עומד בזווית 3/4, צד שמאל של הכלב לכיוון המצלמה, על רקע סטודיו שחור חלק | 4:5, ‏1600×2000 ומעלה | – | המקור לכל השאר |
-| B | **תמונת קרוסלה בלי רקע:** אותה תמונה, אחרי `remove_background` | ‏PNG שקוף | – | הקרוסלה הבהירה ו"הכלב המלווה" |
-| C | **סרטון סיבוב:** המצלמה מקיפה את הכלב 360° במהירות קבועה, והכלב עומד במקום ונושם | 1:1 או 4:3 | 6–8 שניות | הבמה הכהה בדף הזן (גלילה) |
-| D | **סרטון כניסה:** dolly in מהיר מרחוק לקרוב, עם סיבוב קל | 16:9 | 2–3 שניות | המעבר מהקרוסלה לדף הזן |
-| E | **סרטון סיום:** הכלב יושב מול המצלמה ומכשכש, והמצלמה מתרחקת לאט | 16:9 | 3–4 שניות | הסצנה האחרונה (סיום) |
-
-### פרומפט לתמונת הגיבור (A)
-
-באנגלית, כי המודלים מבינים אנגלית טוב יותר. מחליפים את מה שבסוגריים מסולסלים לפי הטבלה למטה.
+קודם מייצרים כלב אחד, בורדר קולי, עד שהזווית והתאורה מושלמות. התמונה הזו היא ה־reference לכל שאר הזנים.
 
 ```
-Photorealistic studio portrait of a single {BREED_EN}, {COAT}, full body visible from nose to tail,
-standing calmly in a natural stance, three-quarter view facing left, eye level camera, 85mm lens.
-Seamless pure black studio backdrop, no floor line. One soft key light from above,
-a thin colored rim light outlining the fur in {ACCENT_HEX} from behind,
-subtle {GLOW_HEX} glow behind the dog fading to black at the edges.
-Sharp fur detail, accurate breed anatomy, healthy adult dog, calm friendly expression.
-No collar, no harness, no clothing, no props, no text, no watermark, no logo. Centered with generous margin.
+Photorealistic studio photo of a single {BREED_EN}, {COAT}, full body from nose to tail and all four paws visible,
+standing calmly, body in three-quarter view facing left, head turned slightly toward the camera,
+camera at the dog's chest height, 70mm lens, dog centered with empty space above it.
+Pure black seamless stage, one hard spotlight straight from above creating a soft pool of light on the floor under the dog,
+thin warm rim light from behind outlining the fur, subtle glossy black floor with a faint reflection of the paws.
+Realistic fur, accurate breed anatomy, friendly calm expression. No collar, no props, no text, no watermark.
 ```
 
-**negative prompt** (אם המודל תומך):
+**negative:**
 
 ```
-cartoon, 3d render, plastic, toy, deformed legs, extra limbs, wrong breed, collar, text, watermark, cropped paws
+cartoon, 3d render, toy, plastic, extra legs, cropped paws, collar, harness, text, logo, colored background, multiple dogs
 ```
 
-**מייצרים 4 גרסאות לכל זן** (batch), ובוחרים את הטובה ביותר לפי הסדר הזה:
+**4 גרסאות לכל זן.** בוחרים לפי:
+1. אנטומיה נכונה: 4 רגליים וכפות שלמות.
+2. זווית זהה למאסטר.
+3. הכלב נראה כמו הזן.
 
-1. האנטומיה נכונה: 4 רגליים, כפות שלמות, זנב אחד.
-2. הכלב נראה כמו הזן.
-3. כל הגוף בפריים.
+### 1ב. שאר הזנים
 
-שומרים את ה־seed ואת ה־media id של התמונה שנבחרה.
+אותו פרומפט, **עם תמונת המאסטר כ־image reference** לזווית, לתאורה ולקומפוזיציה, בחוזק בינוני. מחליפים רק את `{BREED_EN}` ואת `{COAT}` לפי הטבלה בסוף הקובץ.
 
-### פרומפט לסרטון הסיבוב (C), שהוא החשוב ביותר
+### 1ג. שני מצבים לכל כלב: מואר וכבוי
 
-**image-to-video**, עם תמונת הגיבור כ־start frame:
-
-```
-Smooth 360 degree orbit of the camera around the dog at constant speed and constant distance,
-the dog stays perfectly in place and keeps standing, only gentle breathing and a slow tail movement.
-Same black studio backdrop and the same {ACCENT_HEX} rim light for the whole shot.
-No cuts, no zoom, no camera shake, no change of lighting, no new objects. Ends at the starting angle so it loops.
-```
-
-**דרישות שבודקים בסרטון שיוצא:**
-
-- **המצלמה מקיפה, הכלב לא זז.** אם הכלב הולך, מתיישב או משנה צורה, מייצרים מחדש.
-- **הסרטון מסתיים קרוב לזווית ההתחלה:** בודקים שהפריים הראשון והאחרון דומים. אם המודל תומך ב־end frame, נותנים לו את אותה תמונה כ־end frame.
-- **אין קפיצות בתאורה ואין "ריצוד" בפרווה.**
-
-אם מודל אחד לא מצליח לעשות 360° שלמים, עושים **שני קליפים של 180°** (הסוף של הראשון הוא ההתחלה של השני) ומחברים ב־ffmpeg.
-
-### פרומפט לסרטון הכניסה (D)
+- **מואר (`on`):** התמונה שנבחרה.
+- **כבוי (`off`):** **עריכה של אותה תמונה** (edit או image-to-image, ולא ייצור חדש), כדי שהכלב יישאר זהה בדיוק:
 
 ```
-Fast cinematic dolly in from a wide shot to a close three-quarter view of the dog, slight orbit to the left,
-black backdrop with {GLOW_HEX} glow blooming in from the center, floating dust particles catching the {ACCENT_HEX} light.
-Dog stays standing, looks toward camera at the end. No text.
+Same photo, same dog, same pose and framing. The overhead spotlight is switched off:
+the dog is almost a silhouette in darkness, only a thin rim of light along the back, ears and tail edges,
+no light pool on the floor. Do not change the dog, the pose or the framing.
 ```
 
-### פרומפט לסרטון הסיום (E)
+אם העריכה משנה את הכלב, מוותרים על תמונת `off`, ומחשיכים בקוד את תמונת ה־`on` (ראה חלק 2).
 
-```
-The dog sits down facing the camera and wags its tail gently, the camera slowly pulls back,
-warm hazy bloom of {GLOW_HEX} behind the dog, soft focus background, black edges. No text.
-```
+### 1ד. הסרת רקע
 
-### צבעים ותיאור פרווה לכל זן
+על שתי התמונות מריצים `remove_background`, ושומרים כ־PNG שקוף. **את השתקפות הרצפה מוותרים.** האתר יוסיף צל והשתקפות בעצמו.
 
-הצבעים מ־`docs/DOG_LIBRARY_SPEC.md`. למעורבים ה־ACCENT הוא הבלאש של האתר. השם באנגלית ותיאור הפרווה הם לפרומפט בלבד. בודקים מול תמונות של הזן, ואם משהו לא נכון, מתקנים.
-
-| id | קובץ | BREED_EN | COAT | GLOW | ACCENT |
-| --- | --- | --- | --- | --- | --- |
-| border-collie | border_collie | Border Collie | black and white medium-length double coat, white blaze and chest | #3B4A63 | #9FB7E0 |
-| labrador | labrador | Labrador Retriever | short dense yellow coat | #B8742A | #F2B25C |
-| golden | golden | Golden Retriever | long wavy golden coat with feathering | #C9822F | #FFC46B |
-| gsd | gsd | German Shepherd | black and tan saddle coat, medium length | #8A4B1E | #E39A55 |
-| husky | husky | Siberian Husky | grey and white thick coat, light blue eyes | #4F6A8A | #BFD8FF |
-| poodle | poodle | Toy Poodle | apricot curly coat, neat natural trim | #8E7F86 | #F1E3EA |
-| maltese | maltese | Maltese | long silky pure white coat | #8E7F86 | #F1E3EA |
-| shih-tzu | shih_tzu | Shih Tzu | long gold and white coat, short muzzle | #8E7F86 | #F1E3EA |
-| french-bulldog | french_bulldog | French Bulldog | short fawn coat, bat ears | #7D6650 | #E8C9A4 |
-| pug | pug | Pug | short fawn coat with black mask, curled tail | #7D6650 | #E8C9A4 |
-| english-bulldog | english_bulldog | English Bulldog | short white and brindle coat, stocky body | #7D6650 | #E8C9A4 |
-| beagle | beagle | Beagle | tricolor short coat, long floppy ears | #9A5426 | #F09A5B |
-| boxer | boxer | Boxer | short fawn coat with white chest, black mask | #9A5426 | #F09A5B |
-| dachshund | dachshund | Dachshund | smooth short red coat, long low body | #9A5426 | #F09A5B |
-| chihuahua | chihuahua | Chihuahua | smooth short cream coat, large upright ears | #7D6650 | #E8C9A4 |
-| yorkshire | yorkshire | Yorkshire Terrier | long silky steel blue and tan coat | #8E7F86 | #F1E3EA |
-| aussie | aussie | Australian Shepherd | blue merle medium-length coat with copper points | #3B4A63 | #9FB7E0 |
-| canaan | canaan | Canaan Dog | short sandy cream coat, upright ears, curled tail | #A88B5C | #F3D9A6 |
-| mixed-small | mixed | small mixed-breed dog | short brown and white coat | #2A2D33 | #E7A9A0 |
-| mixed-medium | mixed | medium mixed-breed dog | short tan coat | #2A2D33 | #E7A9A0 |
-| mixed-large | mixed | large mixed-breed dog | short black coat with white chest | #2A2D33 | #E7A9A0 |
-
-כל שלושת המעורבים משתמשים כרגע בקובץ אחד (`mixed`). אם רוצים כלב שונה לכל אחד, צריך להוסיף מיפוי ב־`file()` שב־`dogAssets.ts`.
-
-## עיבוד הקבצים (ffmpeg) והכנסה לאתר
-
-הגלילה בדף הזן מריצה את הסרטון קדימה ואחורה, ולכן **כל פריים חייב להיות keyframe**. אחרת הסרטון יקפוץ.
+### 1ה. עיבוד ושמירה
 
 ```bash
-# סרטון סיבוב (C): חיתוך לריבוע סביב הכלב, 880 פיקסלים, כל פריים keyframe, בלי קול
-ffmpeg -i turntable_raw.mp4 -vf "crop=ih:ih,scale=880:-2,fps=30" -c:v libx264 -preset slow -crf 26 \
-  -g 1 -keyint_min 1 -pix_fmt yuv420p -movflags +faststart -an public/dogs/real/{file}.mp4
-
-# פוסטר: הפריים של הזווית שבה הכלב הכי יפה (בדרך כלל השנייה הראשונה)
-ffmpeg -ss 0.5 -i public/dogs/real/{file}.mp4 -frames:v 1 -q:v 3 public/dogs/real/{file}.jpg
-
-# תמונת קרוסלה (B): PNG שקוף ל־WebP שקוף, גובה 900
-ffmpeg -i hero_nobg.png -vf "scale=-2:900" -c:v libwebp -quality 85 -lossless 0 public/dogs/{file}.webp
-
-# סרטוני כניסה וסיום (D, E): 1280 רוחב, keyframe כל חצי שנייה
-ffmpeg -i intro_raw.mp4 -vf "scale=1280:-2" -c:v libx264 -crf 24 -g 15 -an -movflags +faststart public/dogs/real/{file}_intro.mp4
-ffmpeg -i finale_raw.mp4 -vf "scale=1280:-2" -c:v libx264 -crf 24 -g 15 -an -movflags +faststart public/dogs/real/{file}_finale.mp4
+# גובה אחיד 1000 פיקסלים, WebP שקוף
+ffmpeg -i {file}_on.png  -vf "scale=-2:1000" -c:v libwebp -quality 86 public/dogs/lineup/{file}_on.webp
+ffmpeg -i {file}_off.png -vf "scale=-2:1000" -c:v libwebp -quality 80 public/dogs/lineup/{file}_off.webp
 ```
 
-**יעד גודל:** סרטון סיבוב עד 2MB, ותמונת קרוסלה עד 150KB. אם סרטון גדול מזה, מעלים את `crf` ל־28.
+**יישור:** חותכים כל תמונה כך שהכפות נוגעות בתחתית הפריים, עם 2% שוליים בלבד. ככה כולם עומדים על אותו קו רצפה. שמות הקבצים לפי עמודת "קובץ" בטבלה.
 
-**שם הקובץ:** לפי עמודת "קובץ" בטבלה. ה־id עם קו תחתון במקום מקף.
+## חלק 2: השורה באתר (`src/pages/Library.tsx`)
 
-### הכנסה לקוד
+הקרוסלה הקיימת מציגה קשתות שחורות על רקע בלאש. **מחליפים אותה בבמה חשוכה עם ספוטים:**
 
-1. **`src/lib/dogAssets.ts`:** מוסיפים את הזן ל־`turntables` עם `turn('{file}', {...})`.
-   - לכל אחת מהעצירות `intro`, `head`, `mouth`, `legs`, `coat`, `body`, `finale` קובעים `f(t, x, y, zoom)`.
-   - `t` הוא השנייה בסרטון שבה רואים את החלק הזה הכי טוב:
-     - ראש ופה: כשהפנים לכיוון המצלמה.
-     - פרווה: מהצד או מלמעלה.
-     - רגליים: מהצד.
-   - `x` ו־`y` הם המרכז של החלק באחוזים מהפריים.
-   - `zoom` הוא 1.8–2.6 לחלקים קרובים, ו־1 לפתיחה ולסיום.
-   - **איך קובעים את הערכים:** מוציאים פריים כל חצי שנייה (`ffmpeg -i x.mp4 -vf fps=2 frames/%02d.jpg`), מסתכלים עליהם ובוחרים. לא מנחשים.
-2. **תמונת הקרוסלה החדשה מחליפה את `public/dogs/{file}.webp`.** הקרוסלה, הכלב המלווה, והקשתות השחורות בדף הבית ובתוצאות כבר משתמשים בקובץ הזה, אז הם יתעדכנו לבד.
-   - כשיש לזן סרטון סיבוב, `Arch` משתמש בפוסטר `.jpg`. בודקים שהוא נראה טוב בתוך הקשת.
-3. **סרטוני כניסה וסיום (D, E):** מוסיפים לטיפוס `Turntable` את השדות האופציונליים `intro?` ו־`finale?`.
-   - **כניסה:** ב־`Breed.tsx` מנגנים אותו פעם אחת מעל הבמה בזמן מעבר ה־iris, ואז עושים fade לסרטון הסיבוב.
-   - **סיום:** בעצירת `finale` מנגנים אותו במקום להריץ את סרטון הסיבוב.
-   - **כבוד ל־`prefers-reduced-motion`:** במצב הזה מציגים את הפוסטר ולא מנגנים.
-4. **הכלבים בקשת התוצאות ובקרוסלה** צריכים לעמוד באותו גודל ובאותו גובה רצפה. אם תמונה אחת יוצאת גדולה או נמוכה מהשאר, מיישרים אותה ב־CSS לפי זן, או חותכים מחדש ב־ffmpeg.
+### הבמה
 
-## בדיקות לפני שמראים ל־uriel
+- **רקע:** `#0B0809`, עם גרדיאנט רדיאלי עדין `#1A1013` במרכז התחתון. **זה החלק היחיד באתר שכהה כבר בכניסה.** הכותרת והחיצים לבנים (`#F6E4E2`).
+- **רצפה:** פס כהה בתחתית. מתחת לכל כלב יש צל אליפטי מטושטש, ובכלב המואר גם השתקפות חלשה: אותה תמונה הפוכה, opacity של 0.12 ומסכה של גרדיאנט.
 
-1. `npm run build`, ואז `npx vitest run`, ואז `npx playwright test --trace off`. **כל הבדיקות צריכות לעבור.** בדיקת הנגישות (axe) רצה על כל המסכים, במצב יום ובמצב לילה.
-2. `npm run preview`, ואז בדפדפן:
-   - **בגלילה בדף הזן:** הכלב מסתובב חלק, בלי קפיצות, וכל עצירה מראה את החלק הנכון בגוף.
-   - **בטלפון (390×844):** הכלב בחלק העליון, והטקסט מתחת.
-   - **מהירות:** הדף נטען מהר. אם לא, מקטינים את הסרטונים.
-3. **צילומי מסך** של הקרוסלה, של שלוש עצירות בדף הזן ושל הסיום, בדסקטופ ובטלפון.
-4. `npm run build:single` מייצר מחדש את קובץ ה־HTML היחיד ב־`dist-single/index.html`.
-5. **commit ו־push** ל־`main`, עם הודעה ברורה באנגלית.
+### השורה
+
+- כל 21 הכלבים בשורה אופקית אחת, ממוינים לפי הסדר ב־`breeds.json`.
+- הכלב הפעיל במרכז המסך.
+- **גובה כל כלב לפי המשקל האמיתי** (`breed.care.weightKg`): מנרמלים בין 45% ל־100% מגובה הבמה.
+- **רווח קבוע בין הכלבים:** הכלב הפעיל לא "קופץ" בגודל. הוא רק נדלק.
+- **מעבר לכלב הבא:** השורה כולה מחליקה עד שהוא במרכז. 650ms ב־`cubic-bezier(.22,1,.36,1)`.
+
+### הספוט לייט (לב העניין)
+
+- **אלומה:** מעל כל כלב יש `div` עם `background: conic-gradient(...)` או משולש עם `linear-gradient`, מטושטש, עם `mix-blend-mode: screen`.
+  - האלומה יורדת מנקודה בראש הבמה ונפתחת לרוחב הכלב.
+  - הצבע לבן־חמים, `rgba(255,240,225,.22)`, עם נגיעה של `accent` של הזן מ־`breedTheme.ts`.
+- **כתם אור על הרצפה:** אליפסה בהירה מתחת לכלב הפעיל.
+- **מעבר בין כלבים:**
+  1. הספוט הנוכחי כבה ב־180ms.
+  2. השורה מחליקה.
+  3. הספוט החדש נדלק ב־350ms: **הבהוב קצר אחד** (opacity 0, ‏0.6, ‏0.3, ‏1) כמו פנס אמיתי שנדלק.
+  4. תמונת `on` עושה cross-fade מעל תמונת `off`.
+- **בלי תמונת `off`:** מחשיכים בקוד את תמונת ה־`on` עם `filter: brightness(.18) contrast(1.1)`, ומוסיפים rim דק עם `drop-shadow(0 0 1px accent)`.
+- **אבק באלומה:** 10–14 חלקיקים זעירים שמרחפים לאט רק בתוך האלומה הפעילה. **בלי canvas כבד:** מספיק CSS עם `transform`.
+- **מתחת לכלב הפעיל:**
+  - שם הזן בגופן הכותרות של האתר (Frank Ruhl Libre 900).
+  - אם המשתמש עשה את השאלון: אחוז ההתאמה.
+  - כפתור "לכל הפרטים", שפותח את דף הזן עם מעבר ה־iris הקיים.
+
+### שליטה ונגישות
+
+- **שליטה:** חיצים ‹ ›, החלקה בטלפון, גלגלת אופקית, ומקלדת (חיצים, Enter, Esc). **RTL:** הכלב הבא משמאל.
+- **הכרזה לקורא מסך:** `aria-live="polite"` מכריז "{שם הזן}, {X} מתוך 21".
+- **כל כלב הוא `<button>`** עם `aria-label` של שם הזן. לחיצה על כלב לא פעיל מביאה אותו למרכז.
+- **`prefers-reduced-motion`:** בלי החלקה, בלי הבהוב ובלי חלקיקים. רק cross-fade של 200ms.
+- **ביצועים:**
+  - טוענים רק את 7 הכלבים הקרובים (`loading="lazy"` לשאר).
+  - מאנימציה רק `transform` ו־`opacity`, בלי לאנימציה `filter`.
+  - היעד: 60fps בטלפון.
+- **בטלפון (390×844):** רואים את הכלב הפעיל ועוד כלב חלקי מכל צד.
+
+### בדיקות
+
+1. `npm run build`, `npx vitest run`, `npx playwright test --trace off`. **הכל צריך לעבור,** כולל axe במצב יום ובמצב לילה.
+2. **צילומי מסך:** השורה עם בורדר קולי מואר, ואחרי מעבר אחד עם לברדור מואר, בדסקטופ ובטלפון.
+3. `npm run build:single`, ואז commit ו־push ל־`main`.
+
+## חלק 3: סרטון לרשתות (אופציונלי, רק אחרי שהאתר מאושר ובאישור על המחיר)
+
+**דרך א, עדיפה:** `scene_builder_3d`.
+- מייבאים את תמונות ה־`on` כנכסים, או את ה־GLB מ־`generate_3d` אם uriel אישר.
+- מסדרים בשורה על במה שחורה, עם ספוט מעל כל כלב.
+- המצלמה זזה לאט לאורך השורה (truck), והספוטים נדלקים אחד אחד.
+- 9:16 ו־16:9, ‏15–20 שניות.
+
+**דרך ב:** image-to-video, כש־start frame הוא צילום מסך של השורה באתר:
+
+```
+Slow cinematic camera truck from right to left along a row of dogs standing on a dark stage,
+each dog lights up under its own overhead spotlight as the camera reaches it while the previous spotlight fades,
+dust floating in the light beams, glossy black floor reflections. Dogs stay in place, no text.
+```
+
+## הזנים: תיאור לפרומפט, קובץ וצבע
+
+| id | קובץ | BREED_EN | COAT | ACCENT |
+| --- | --- | --- | --- | --- |
+| border-collie | border_collie | Border Collie | black and white medium-length coat, white blaze and chest | #9FB7E0 |
+| labrador | labrador | Labrador Retriever | short dense yellow coat | #F2B25C |
+| golden | golden | Golden Retriever | long wavy golden coat with feathering | #FFC46B |
+| gsd | gsd | German Shepherd | black and tan saddle coat | #E39A55 |
+| husky | husky | Siberian Husky | grey and white thick coat, light blue eyes | #BFD8FF |
+| poodle | poodle | Toy Poodle | apricot curly coat, natural trim | #F1E3EA |
+| maltese | maltese | Maltese | long silky white coat | #F1E3EA |
+| shih-tzu | shih_tzu | Shih Tzu | long gold and white coat | #F1E3EA |
+| french-bulldog | french_bulldog | French Bulldog | short fawn coat, bat ears | #E8C9A4 |
+| pug | pug | Pug | short fawn coat with black mask | #E8C9A4 |
+| english-bulldog | english_bulldog | English Bulldog | short white and brindle coat | #E8C9A4 |
+| beagle | beagle | Beagle | tricolor short coat, long ears | #F09A5B |
+| boxer | boxer | Boxer | short fawn coat, white chest, black mask | #F09A5B |
+| dachshund | dachshund | Dachshund | smooth short red coat | #F09A5B |
+| chihuahua | chihuahua | Chihuahua | smooth short cream coat, big upright ears | #E8C9A4 |
+| yorkshire | yorkshire | Yorkshire Terrier | long silky steel blue and tan coat | #F1E3EA |
+| aussie | aussie | Australian Shepherd | blue merle coat with copper points | #9FB7E0 |
+| canaan | canaan | Canaan Dog | short sandy cream coat, upright ears, curled tail | #F3D9A6 |
+| mixed-small | mixed_small | small mixed-breed dog | short brown and white coat | #E7A9A0 |
+| mixed-medium | mixed_medium | medium mixed-breed dog | short tan coat | #E7A9A0 |
+| mixed-large | mixed_large | large mixed-breed dog | short black coat with white chest | #E7A9A0 |
+
+תיאורי הפרווה הם לפרומפט בלבד. בודקים שהתוצאה נראית כמו הזן. לשלושת המעורבים יש כאן קובץ נפרד לכל אחד, ולכן צריך לעדכן את `file()` ב־`src/lib/dogAssets.ts` (היום שלושתם הם `mixed`), או להוסיף פונקציה `dogLineup(id, state)`.
 
 ## מה מראים ל־uriel בסוף הפיילוט
 
 הודעה קצרה בעברית, עם:
 
-- הצילומים;
+- צילומי המסך;
 - כמה קרדיטים יצאו;
-- מה עבד ומה לא (למשל: "הסיבוב קופץ בשנייה 4, ייצרתי מחדש");
-- השאלה אם להמשיך לשאר 20 הזנים, והעלות המשוערת.
-
-**אחרי אישור:** מייצרים בקבוצות של 4–5 זנים (batch, ואז `jobs_wait`), ומראים אחרי כל קבוצה.
-
-## אופציה למתקדמים: מודל תלת־ממד אמיתי במקום סרטון
-
-ל־Higgsfield יש `generate_3d`, שהופך תמונה למודל GLB. **נסה את זה רק אחרי שהפיילוט בסרטונים עובד, ורק באישור של uriel:**
-
-- נותנים לו את תמונת הקרוסלה (B) של בורדר קולי.
-- מקבלים GLB, ובודקים ב־`npm run dev` אם הוא נראה טוב יותר מסרטון הסיבוב. בודקים פרווה, רגליים וגודל קובץ: עד 5MB.
-- אם כן, שמים אותו ב־`public/dogs/{file}.glb`, ומורידים את הזן מ־`turntables` כדי שהבמה התלת־ממדית (`DogStage`) תשתמש בו.
-- **מודל כזה לא זז** (אין לו שלד ואנימציה), ולכן הכלב יעמוד קפוא. את ההחלטה משאירים ל־uriel.
+- מה עבד ומה לא;
+- השאלה אם להמשיך לכל 21 הזנים, והמחיר המשוער.
