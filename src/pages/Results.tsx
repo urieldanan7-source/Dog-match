@@ -7,7 +7,7 @@ import { Arch } from '../components/ui'
 import { reducedMotion, useIris } from '../components/Iris'
 import { themeFor } from '../lib/breedTheme'
 import { dogImage, dogRun } from '../lib/dogAssets'
-import { coreQuestions, profileFromAnswers, refineQuestions, type Profile } from '../lib/quiz'
+import { coreQuestions, profileFromAnswers, refineQuestions, sizeNote, type Profile } from '../lib/quiz'
 import { rankBreeds, traitById, type Match, type TraitId } from '../lib/scoring'
 import { useStore } from '../lib/store'
 import { goodAndBad, levelText } from '../lib/traitCopy'
@@ -141,7 +141,7 @@ export default function Results() {
       )}
       {!notYet && <Lineup top={top} animate={!!state?.justFinished && !reducedMotion()} />}
 
-      {profile.notes.map((n) => <p key={n} className="mt-4 flex gap-2 border-s-4 border-ink bg-blush p-4"><Alert className="shrink-0" />{n}</p>)}
+      {[...profile.notes, sizeNote(answers, matches)].filter((n): n is string => !!n).map((n) => <p key={n} className="mt-4 flex gap-2 border-s-4 border-ink bg-blush p-4"><Alert className="shrink-0" />{n}</p>)}
       {profile.options.allergy && <p className="mt-4 border-s-4 border-ink bg-blush p-4">בגלל האלרגיה מוצגים רק כלבים שנושרים מעט. אין כלב שלא גורם לאלרגיה בכלל, אז כדאי לבלות זמן עם הכלב לפני שמחליטים.</p>}
 
       <ol className="m-0 mt-8 grid list-none gap-0 p-0">

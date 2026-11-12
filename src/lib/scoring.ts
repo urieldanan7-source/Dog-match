@@ -44,6 +44,14 @@ export interface MatchOptions {
   priorities?: TraitId[]
   allergy?: boolean
   noAircon?: boolean
+  /**
+   * What the user would like, on top of what they can handle. Needs are limits ("no bigger than 4");
+   * a preference also costs a breed points for missing it on the other side ("I want a big dog").
+   * Without this, the gentlest small breeds win almost every quiz, since they never break a limit.
+   */
+  prefs?: Partial<Record<TraitId, number>>
+  /** Extra weight for a trait the user asked about directly, below the weight of a priority. */
+  weights?: Partial<Record<TraitId, number>>
 }
 export interface Match {
   breed: Breed
@@ -63,9 +71,13 @@ export function scoreBreed(breed: Breed, needs: Needs, opts: MatchOptions = {}):
   let total = 0
   let weights = 0
   const parts: TraitScore[] = traits.map((t) => {
-    const d = distance(t.mode, breed.scores[t.id], needs[t.id])
-    const score = Math.max(0, 1 - d / 2)
-    const weight = prio.has(t.id) ? 3 : 1
+    const value = breed.scores[t.id]
+    const d = distance(t.mode, value, needs[t.id])
+    const pref = opts.prefs?.[t.id]
+    // A missed preference counts like a broken limit, on the side the limit does not cover.
+    const miss = d === 0 && pref !== undefined ? Math.abs(value - pref) : 0
+    const score = Math.max(0, 1 - (d + miss) / 2)
+    const weight = prio.has(t.id) ? 3 : opts.weights?.[t.id] ?? 1
     total += weight * score
     weights += weight
     return { trait: t.id, score, weight }
@@ -100,6 +112,18 @@ export function rankBreeds(needs: Needs, opts: MatchOptions = {}, list: Breed[] 
       Number(a.overBudget) - Number(b.overBudget) || b.percent - a.percent ||
       (a.breed.name < b.breed.name ? -1 : a.breed.name > b.breed.name ? 1 : 0),
     )
+  // The mixed-breed groups fit almost everyone a little, so without this they fill the top every time.
+  // Keep the best one in the top three and move the others just below it.
+  const isMixed = (m: Match) => m.breed.id.startsWith('mixed-')
+  const head: Match[] = []
+  const held: Match[] = []
+  for (const m of sorted) {
+    if (head.length < 3 && isMixed(m) && head.some(isMixed)) held.push(m)
+    else head.push(m)
+    if (head.length === 3) break
+  }
+  const rest = sorted.filter((m) => !head.includes(m) && !held.includes(m))
+  sorted.splice(0, sorted.length, ...head, ...held, ...rest)
   const best = sorted.find((m) => !m.overBudget) ?? sorted[0]
   return { matches: sorted, notYet: !best || best.percent < NOT_YET_THRESHOLD }
 }
