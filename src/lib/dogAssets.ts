@@ -48,15 +48,19 @@ export const shots: Record<StopId, { position: Vec3; target: Vec3; anchor?: Vec3
  * `t` is the time in seconds, `x`/`y` the focal point in percent of the frame, `zoom` the scale.
  */
 export interface Framing { t: number; x: number; y: number; zoom: number }
-type Turntable = { src: string; poster: string; shots: Record<StopId, Framing> }
+/** Without `src` the dog is a single photo: the stage only zooms to the body part, it cannot turn. */
+type Turntable = { src?: string; poster: string; shots: Record<StopId, Framing> }
 const f = (t: number, x = 50, y = 50, zoom = 1): Framing => ({ t, x, y, zoom })
 const turn = (id: string, shotsFor: Record<StopId, Framing>): Turntable =>
   ({ get src() { return url(`real/${id}.mp4`) }, poster: url(`real/${id}.jpg`), shots: shotsFor })
+const still = (id: string, shotsFor: Record<StopId, Framing>): Turntable =>
+  ({ poster: url(`real/${id}.jpg`), shots: shotsFor })
 
 const turntables: Record<string, Turntable> = {
-  'border-collie': turn('border_collie', {
-    intro: f(2.5), head: f(2.5, 72, 20, 2), mouth: f(2.5, 79, 25, 2.6), legs: f(2.0, 60, 72, 2),
-    coat: f(2.0, 40, 38, 1.8), body: f(2.0, 48, 45, 1.3), finale: f(3.0),
+  // A studio photo (public/dogs/real/border_collie.jpg, 880x764), so `t` is always 0.
+  'border-collie': still('border_collie', {
+    intro: f(0), head: f(0, 65, 27, 2), mouth: f(0, 71, 33, 2.2), legs: f(0, 57, 74, 1.9),
+    coat: f(0, 39, 47, 1.8), body: f(0, 50, 52, 1.3), finale: f(0),
   }),
   golden: turn('golden', {
     intro: f(3.0), head: f(3.0, 82, 24, 2), mouth: f(3.0, 90, 27, 2.6), legs: f(3.0, 62, 80, 1.8),

@@ -3,9 +3,15 @@ import { dogTurntable, type StopId } from '../lib/dogAssets'
 
 const MOVE = 850
 const RATIO = 880 / 764
-const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
+// A photo has straight black edges. Fading them out lets it sit on the stage glow without a visible box.
+const fade = 'radial-gradient(ellipse 70% 70% at 50% 50%, #000 70%, transparent 100%)'
+const STILL_MASK = { WebkitMaskImage: fade, maskImage: fade }
+const ease =(t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2)
 
-/** A turntable video used as the dog: scrubbed to the angle of each stop and zoomed to the body part. */
+/**
+ * A turntable video used as the dog: scrubbed to the angle of each stop and zoomed to the body part.
+ * A breed that only has a photo gets the zoom without the turn.
+ */
 export function TurntableStage({ breedId, stop }: { breedId: string; stop: StopId }) {
   const table = dogTurntable(breedId)!
   const video = useRef<HTMLVideoElement>(null)
@@ -49,18 +55,17 @@ export function TurntableStage({ breedId, stop }: { breedId: string; stop: StopI
   }, [])
 
   const focused = shot.zoom > 1
+  const style = {
+    width: size.w, height: size.h,
+    transformOrigin: `${shot.x}% ${shot.y}%`,
+    transform: `translate(${50 - shot.x}%, ${50 - shot.y}%) scale(${shot.zoom})`,
+    transition: `transform ${MOVE}ms cubic-bezier(.65,0,.35,1), transform-origin ${MOVE}ms cubic-bezier(.65,0,.35,1)`,
+  }
   return (
     <div ref={box} className="turntable relative grid h-full w-full place-items-center overflow-hidden">
-      <video
-        ref={video} src={table.src} poster={table.poster} muted playsInline preload="auto" tabIndex={-1}
-        className="max-w-none"
-        style={{
-          width: size.w, height: size.h,
-          transformOrigin: `${shot.x}% ${shot.y}%`,
-          transform: `translate(${50 - shot.x}%, ${50 - shot.y}%) scale(${shot.zoom})`,
-          transition: `transform ${MOVE}ms cubic-bezier(.65,0,.35,1), transform-origin ${MOVE}ms cubic-bezier(.65,0,.35,1)`,
-        }}
-      />
+      {table.src
+        ? <video ref={video} src={table.src} poster={table.poster} muted playsInline preload="auto" tabIndex={-1} className="max-w-none" style={style} />
+        : <img src={table.poster} alt="" className="max-w-none" style={{ ...style, ...STILL_MASK }} />}
       {focused && <span className="hotspot absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px]" />}
     </div>
   )
