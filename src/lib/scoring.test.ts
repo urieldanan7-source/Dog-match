@@ -1,30 +1,39 @@
 import { describe, expect, it } from 'vitest'
-import { profileFromAnswers, type Answers } from './quiz'
+import { mixedNote, profileFromAnswers, sizeNote, type Answers } from './quiz'
 import { distance, rankBreeds, scoreBreed, breedById } from './scoring'
 
 /**
- * The worked example from the spec ("בסיס לבנייה"): a couple with an 8-year-old,
- * a 70 sqm flat with a lift, attached neighbours, one to two hours a day, dog alone
- * 4 to 8 hours, light walks, 300 to 600 ILS, no experience, air-conditioning in the
- * centre, hair bothers a little. Priorities: happy with kids, easy to train.
+ * The spec's worked example ("בסיס לבנייה"), updated for the 2026-11-12 quiz fix: the household-size
+ * question became "what size of dog", the home, budget and neighbour limits were loosened to match
+ * real costs, and wanting a size or having lots of time now counts against breeds that miss it.
  */
 const example: Answers = {
-  changes: 'no', people: '3+', kids: '6-12', pets: 'none', allergy: 'no',
+  changes: 'no', sizePref: 'any', kids: '6-12', pets: 'none', allergy: 'no',
   home: 'elevator', homeSize: '60-90', garden: 'none', neighbors: 'yes',
   time: '1-2', aloneHours: '4-8', sport: 'walks', travel: 'rare',
   budget: '300-600', experience: 'none', priorities: ['kids', 'trainable'],
   climate: 'center', hair: 'some',
 }
 
+const base: Answers = {
+  changes: 'no', sizePref: 'any', kids: 'none', pets: 'none', allergy: 'no',
+  home: 'elevator', homeSize: '90-130', garden: 'none', neighbors: 'yes',
+  time: '1-2', aloneHours: '4-8', sport: 'walks', travel: 'some',
+  budget: '600-1000', experience: 'family', priorities: [], climate: 'center', hair: 'some',
+}
+const run = (a: Answers) => { const p = profileFromAnswers(a); return rankBreeds(p.needs, p.options).matches }
+const size = (m: { breed: { scores: { size: number } } }) => m.breed.scores.size
+
 describe('profileFromAnswers', () => {
-  it('maps the worked example to the needs in the spec', () => {
+  it('maps the worked example to needs', () => {
     const { needs, options } = profileFromAnswers(example)
     expect(needs).toEqual({
-      energy: 3, shedding: 3, barking: 2, exercise: 3, size: 3, grooming: 5, cost: 2,
+      energy: 3, shedding: 3, barking: 3, exercise: 3, size: 4, grooming: 5, cost: 3,
       trainability: 4, kids: 4, pets: 1, alone: 3, heat: 2,
     })
     expect(options.priorities?.sort()).toEqual(['kids', 'trainability'])
     expect(options.allergy).toBe(false)
+    expect(options.prefs).toEqual({ exercise: 3 })
   })
 
   it('uses the lenient value for traits no question set', () => {
@@ -35,8 +44,14 @@ describe('profileFromAnswers', () => {
   })
 
   it('takes the stricter value when two questions touch one trait', () => {
-    expect(profileFromAnswers({ home: 'garden', homeSize: '<60' }).needs.size).toBe(2)
-    expect(profileFromAnswers({ home: 'garden', travel: 'lots' }).needs.size).toBe(3)
+    expect(profileFromAnswers({ home: 'garden', homeSize: '<60' }).needs.size).toBe(3)
+    expect(profileFromAnswers({ home: 'garden', travel: 'lots' }).needs.size).toBe(4)
+  })
+
+  it('keeps a size wish inside what the home allows, and says so', () => {
+    const p = profileFromAnswers({ sizePref: 'large', homeSize: '<60' })
+    expect(p.options.prefs?.size).toBe(3)
+    expect(p.notes.length).toBe(1)
   })
 })
 
@@ -51,33 +66,57 @@ describe('distance', () => {
   })
 })
 
-describe('rankBreeds reproduces the worked example', () => {
+describe('results follow the answers', () => {
+  it('asking for a large dog puts a large dog first and no small dog in the top three', () => {
+    const top = run({ ...base, sizePref: 'large' }).slice(0, 3)
+    expect(size(top[0])).toBeGreaterThanOrEqual(4)
+    expect(top.every((m) => size(m) >= 3)).toBe(true)
+  })
+
+  it('asking for a small dog puts small dogs first', () => {
+    expect(run({ ...base, sizePref: 'small' }).slice(0, 3).every((m) => size(m) <= 2)).toBe(true)
+  })
+
+  it('an active owner with a garden gets active dogs, not lap dogs', () => {
+    const top = run({ ...base, home: 'garden', garden: 'big', neighbors: 'no', time: '3+', aloneHours: '<4', sport: 'run', priorities: ['sport'], hair: 'no' }).slice(0, 3)
+    expect(top.every((m) => m.breed.scores.exercise >= 4 && size(m) >= 3)).toBe(true)
+  })
+
+  it('a quiet single in a small flat gets small, calm dogs', () => {
+    const top = run({ ...base, home: 'walkup', homeSize: '<60', time: '<1', sport: 'none', budget: '<300', experience: 'none', priorities: ['calm', 'quiet'], hair: 'very' }).slice(0, 2)
+    expect(top.every((m) => size(m) <= 2)).toBe(true)
+  })
+
+  it('two very different people get different top two', () => {
+    const a = run({ ...base, sizePref: 'small', time: '<1', sport: 'none' }).slice(0, 2).map((m) => m.breed.id)
+    const b = run({ ...base, sizePref: 'large', time: '3+', sport: 'run', home: 'garden', garden: 'big' }).slice(0, 2).map((m) => m.breed.id)
+    expect(a.filter((id) => b.includes(id))).toEqual([])
+  })
+
+  it('never ranks "mixed" as if it were a breed', () => {
+    expect(run(example).some((m) => m.breed.id.startsWith('mixed-'))).toBe(false)
+  })
+
+  it('tells shelter adopters what kind of mixed dog to look for', () => {
+    expect(mixedNote(run({ ...base, sizePref: 'large', time: '3+', sport: 'run' }))).toMatch(/חפשו כלב גדול/)
+  })
+
+  it('explains when the size asked for is not on top', () => {
+    const a: Answers = { ...base, sizePref: 'large', time: '<1', aloneHours: '8+', budget: '<300' }
+    const matches = run(a)
+    if (size(matches[0]) < 4) expect(sizeNote(a, matches)).toMatch(/הכלב הגדול שהכי מתאים לכם/)
+    expect(sizeNote({ ...a, sizePref: 'any' }, matches)).toBeUndefined()
+  })
+})
+
+describe('budget', () => {
   const { needs, options } = profileFromAnswers(example)
-  const { matches, notYet } = rankBreeds(needs, options)
-  const pct = (id: string) => matches.find((m) => m.breed.id === id)!.percent
-
-  it('gives the percentages in the spec', () => {
-    expect(pct('shih-tzu')).toBe(88)
-    expect(pct('mixed-small')).toBe(84)
-    expect(pct('poodle')).toBe(84)
-    expect(pct('beagle')).toBe(81)
-    expect(pct('mixed-medium')).toBe(81)
-  })
-
-  it('orders the top five as in the spec', () => {
-    expect(matches.slice(0, 5).map((m) => m.breed.id)).toEqual([
-      'shih-tzu', 'mixed-small', 'poodle', 'beagle', 'mixed-medium',
-    ])
-    expect(notYet).toBe(false)
-  })
-
-  it('drops the French Bulldog to the bottom for cost despite 88%', () => {
-    const fb = matches.find((m) => m.breed.id === 'french-bulldog')!
-    expect(fb.percent).toBe(88)
-    expect(fb.overBudget).toBe(true)
+  const { matches } = rankBreeds(needs, options)
+  it('drops breeds two steps over budget to the bottom', () => {
     const firstOver = matches.findIndex((m) => m.overBudget)
-    expect(matches.slice(firstOver).every((m) => m.overBudget)).toBe(true)
-    expect(matches.indexOf(fb)).toBeGreaterThanOrEqual(firstOver)
+    if (firstOver >= 0) expect(matches.slice(firstOver).every((m) => m.overBudget)).toBe(true)
+    expect(matches.find((m) => m.breed.id === 'labrador')!.overBudget).toBe(false)
+    expect(rankBreeds(profileFromAnswers({ budget: '<300' }).needs).matches.find((m) => m.breed.id === 'labrador')!.overBudget).toBe(true)
   })
 
   it('always gives at least two caveats, even for the best match', () => {

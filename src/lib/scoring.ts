@@ -21,9 +21,15 @@ export interface Breed {
 }
 
 export const traits = data.traits as Trait[]
-export const breeds = data.breeds as unknown as Breed[]
+export const allBreeds = data.breeds as unknown as Breed[]
+/**
+ * Real breeds only. "Mixed" is not a breed: every mixed dog is different, so the quiz, the library
+ * and the comparison leave it out. The mixed entries stay in the data for owners of a mixed dog
+ * (food and care estimates by size in "my dog").
+ */
+export const breeds = allBreeds.filter((b) => !b.id.startsWith('mixed-'))
 export const traitById = Object.fromEntries(traits.map((t) => [t.id, t])) as Record<TraitId, Trait>
-export const breedById = (id: string) => breeds.find((b) => b.id === id)
+export const breedById = (id: string) => allBreeds.find((b) => b.id === id)
 
 export type Needs = Record<TraitId, number>
 
@@ -44,6 +50,14 @@ export interface MatchOptions {
   priorities?: TraitId[]
   allergy?: boolean
   noAircon?: boolean
+  /**
+   * What the user would like, on top of what they can handle. Needs are limits ("no bigger than 4");
+   * a preference also costs a breed points for missing it on the other side ("I want a big dog").
+   * Without this, the gentlest small breeds win almost every quiz, since they never break a limit.
+   */
+  prefs?: Partial<Record<TraitId, number>>
+  /** Extra weight for a trait the user asked about directly, below the weight of a priority. */
+  weights?: Partial<Record<TraitId, number>>
 }
 export interface Match {
   breed: Breed
@@ -63,9 +77,13 @@ export function scoreBreed(breed: Breed, needs: Needs, opts: MatchOptions = {}):
   let total = 0
   let weights = 0
   const parts: TraitScore[] = traits.map((t) => {
-    const d = distance(t.mode, breed.scores[t.id], needs[t.id])
-    const score = Math.max(0, 1 - d / 2)
-    const weight = prio.has(t.id) ? 3 : 1
+    const value = breed.scores[t.id]
+    const d = distance(t.mode, value, needs[t.id])
+    const pref = opts.prefs?.[t.id]
+    // A missed preference counts like a broken limit, on the side the limit does not cover.
+    const miss = d === 0 && pref !== undefined ? Math.abs(value - pref) : 0
+    const score = Math.max(0, 1 - (d + miss) / 2)
+    const weight = prio.has(t.id) ? 3 : opts.weights?.[t.id] ?? 1
     total += weight * score
     weights += weight
     return { trait: t.id, score, weight }
